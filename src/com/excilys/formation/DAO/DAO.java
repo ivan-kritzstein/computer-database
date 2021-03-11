@@ -1,6 +1,7 @@
-package com.excilys.formation.model;
+package com.excilys.formation.DAO;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.List;
 
 public abstract class DAO<T> {
@@ -46,6 +47,6 @@ public abstract class DAO<T> {
 
 	public abstract T showDetailsWithName(String name);
 
-	public abstract List<T> list();
+	public abstract ResultSet getListSql();
 
 }

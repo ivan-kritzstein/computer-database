@@ -1,4 +1,4 @@
-package com.excilys.formation.ui;
+package com.excilys.formation.view;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -7,10 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import com.excilys.formation.DAO.DAOCompany;
+import com.excilys.formation.DAO.DAOComputer;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
-import com.excilys.formation.model.DAOCompany;
-import com.excilys.formation.model.DAOComputer;
 import com.excilys.formation.model.Data;
 
 public class UseMenu {

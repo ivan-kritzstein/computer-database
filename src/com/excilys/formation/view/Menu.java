@@ -1,4 +1,4 @@
-package com.excilys.formation.ui;
+package com.excilys.formation.view;
 
 public class Menu {
 	

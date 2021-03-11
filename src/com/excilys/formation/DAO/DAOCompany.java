@@ -1,4 +1,4 @@
-package com.excilys.formation.model;
+package com.excilys.formation.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.excilys.formation.model.Company;
 
 public class DAOCompany extends DAO<Company> {
 
@@ -110,7 +112,7 @@ public class DAOCompany extends DAO<Company> {
 		return company;
 	}
 
-	public List<Company> list() {
+	public ResultSet getListSql() {
 		List<Company> listeCompany = new ArrayList<Company>();
 
 		try {
