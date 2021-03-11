@@ -1,19 +1,19 @@
 package com.excilys.formation.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Computer {
 	private String name = "";
-	private int id = 0;
-	private int company_id = 1;
-	private Date introduced = null;
-	private Date discontinued = null;
+	private Long id = null;
+	private Long company_id = null;
+	private LocalDate introduced = null;
+	private LocalDate discontinued = null;
 
-	public Computer () {
+	public Computer() {
 
 	}
 
-	public Computer(int id, String name, Date introduced, Date discontinued, int company_id) {
+	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long company_id) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -24,35 +24,46 @@ public class Computer {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getId() {
+
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+	public void setId(Long id) {
 		this.id = id;
 	}
-	public Date getIntroduced() {
+
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
-	public void setIntroduced(Date introduced) {
+
+	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
-	public Date getDiscontinued() {
+
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
-	public void setDiscontinued(Date discontinued) {
+
+	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
-	public int getCompany_id() {
+
+	public Long getCompany_id() {
 		return company_id;
 	}
-	public void setCompany_id(int company_id) {
+
+	public void setCompany_id(Long company_id) {
 		this.company_id = company_id;
 	}
+
 	public String toString() {
 
-		return "id = " + id + " name = " + name + " introduced date = " + introduced + " discontinued date = " + discontinued + " company id = "+ company_id;
+		return "id = " + id + " name = " + name + " introduced date = " + introduced + " discontinued date = "
+				+ discontinued + " company id = " + company_id;
 	}
 }

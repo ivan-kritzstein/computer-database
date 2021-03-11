@@ -3,13 +3,13 @@ package com.excilys.formation.model;
 
 public class Company {
 	private String name = "test";
-	private int id = 0;
+	private Long id = null;
 	
 	public Company() {
 		
 	}
 	
-	public Company(int id, String name) {
+	public Company(Long id, String name) {
 		this.setId(id);
 		this.setName(name);
 	}
@@ -22,11 +22,11 @@ public class Company {
 		this.name = name;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

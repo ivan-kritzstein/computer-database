@@ -36,7 +36,24 @@ public class Menu {
 	}
 	public void menuCreateComputer() {
 		System.out.println(SEPARATE);
-		System.out.println("Entrez les caractéristiques d'un nouvel ordinater");
+		System.out.println("Entrez les caractéristiques d'un nouvel ordinateur");
+	}
+	
+	public void createInstructions1 () {
+		System.out.println(SEPARATE);
+		System.out.println("Veuillez entrer le nom de l'ordinateur à créer");
+	}
+	public void createInstructions2 () {
+		System.out.println(SEPARATE);
+		System.out.println("Veuillez entrer la date (yyyy MM dd) d'introduction de l'ordinateur à créer");
+	}
+	public void createInstructions3 () {
+		System.out.println(SEPARATE);
+		System.out.println("Veuillez entrer la date d'arrêt de l'ordinateur à créer");
+	}
+	public void createInstructions4 () {
+		System.out.println(SEPARATE);
+		System.out.println("Veuillez entrer l'id de la company de l'ordinateur à créer");
 	}
 	
 }	

@@ -1,9 +1,17 @@
 package com.excilys.formation.ui;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-import com.excilys.formation.model.*;
+import com.excilys.formation.model.Company;
+import com.excilys.formation.model.Computer;
+import com.excilys.formation.model.DAOCompany;
+import com.excilys.formation.model.DAOComputer;
+import com.excilys.formation.model.Data;
 
 public class UseMenu {
 
@@ -11,10 +19,9 @@ public class UseMenu {
 	Scanner sc = new Scanner(System.in);
 	Connection con;
 
-
-	public UseMenu () {
+	public UseMenu() {
 		// ouvre menu 1
-		Data data = new Data ();
+		Data data = new Data();
 		try {
 			con = data.getConnection();
 
@@ -28,54 +35,56 @@ public class UseMenu {
 	public void useMenuP() {
 		menuP.menuPrincipal();
 		int userEntry = 0;
-		while(userEntry!=100) {
+		while (userEntry != 100) {
 
 			userEntry = Integer.parseInt(sc.nextLine());
 
 			switch (userEntry) {
-			case 0 : menuP.menuPrincipal();
-			break;
+			case 0:
+				menuP.menuPrincipal();
+				break;
 
-			case 1 : 
+			case 1:
 				listCompanies();
 				menuP.retourMenuPrincipal();
 				break;
 
-			case 2 : 
+			case 2:
 				menuP.menuShowCompanyDetails();
 				showCompanyDetails();
 				menuP.menuPrincipal();
 
 				break;
-			case 3 : 
+			case 3:
 				listComputer();
 				menuP.retourMenuPrincipal();
 				break;
-			case 4 : 
+			case 4:
 				menuP.menuShowComputerDetails();
 				showComputerDetails();
 				menuP.menuPrincipal();
 
 				break;
-			case 5 : 
+			case 5:
 				menuP.menuCreateComputer();
+				createComputer();
 				break;
-			case 6 : 
+			case 6:
 
 				break;
-			case 7 : 
+			case 7:
 
 				break;
-			default :
+			default:
 				break;
 			}
 		}
 		sc.close();
 
-		//		DAOComputer daoc = new DAOComputer (con);
-		//		DAOCompany daocp = new DAOCompany(con);
-		//		Company comp = new Company (44, "company test");
-		//		daocp.updateByName("company test", comp);
+		// DAOComputer daoc = new DAOComputer (con);
+		// DAOCompany daocp = new DAOCompany(con);
+		// Company comp = new Company (44, "company test");
+		// daocp.updateByName("company test", comp);
 		try {
 			con.close();
 		} catch (SQLException e) {
@@ -85,7 +94,6 @@ public class UseMenu {
 
 		// création et utilisation Scanner
 
-
 	}
 
 	public void listCompanies() {
@@ -93,21 +101,20 @@ public class UseMenu {
 		for (Company c : daocp.list()) {
 			System.out.println(c);
 		}
-		//DAOCompany daocp = 
+		// DAOCompany daocp =
 	}
 
 	public void showCompanyDetails() {
 		String input;
 		DAOCompany daocp = new DAOCompany(con);
 		input = sc.nextLine();
-		while (!input.startsWith("0")){
+		while (!input.startsWith("0")) {
 			try {
-				int idDetails = Integer.parseInt(input);
+				Long idDetails = Long.parseLong(input);
 				System.out.println(daocp.showDetailsWithId(idDetails));
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				String nameDetails = input;
-				System.out.println(daocp.showDetailsWithName(nameDetails));	
+				System.out.println(daocp.showDetailsWithName(nameDetails));
 			}
 
 			menuP.retourMenuPrincipal();
@@ -120,44 +127,60 @@ public class UseMenu {
 		for (Computer c : daoc.list()) {
 			System.out.println(c);
 		}
-		//DAOCompany daocp = 
+		// DAOCompany daocp =
 	}
-	
+
 	public void showComputerDetails() {
 		String input;
 		DAOComputer daoc = new DAOComputer(con);
 		input = sc.nextLine();
-		while (!input.startsWith("0")){
+		while (!input.startsWith("0")) {
 			try {
-				int idDetails = Integer.parseInt(input);
+				Long idDetails = Long.parseLong(input);
 				System.out.println(daoc.showDetailsWithId(idDetails));
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				String nameDetails = input;
-				System.out.println(daoc.showDetailsWithName(nameDetails));	
+				System.out.println(daoc.showDetailsWithName(nameDetails));
 			}
 
 			menuP.retourMenuPrincipal();
 			input = sc.nextLine();
 		}
 	}
-	
+
 	public void createComputer() {
 		String input;
 		DAOComputer daoc = new DAOComputer(con);
-		
+		Long id = null;
 		input = sc.nextLine();
-		while (!input.startsWith("0")){
-			Computer computer = new Computer(null,input,Date.parse(input),Date.parse(input),Integer.parseInt(input));
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy MM dd");
+		while (!input.startsWith("0")) {
+			try {
+				menuP.createInstructions1();
+				String name = sc.nextLine();
+				menuP.createInstructions2();
+
+				LocalDate introduced = LocalDate.parse(sc.nextLine(), df);
+				menuP.createInstructions3();
+				
+				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
+				menuP.createInstructions4();
+				Long company_id = Long.parseLong(sc.nextLine());
+
+				Computer computer = new Computer(id, name, introduced, discontinued, company_id);
+			} catch (DateTimeParseException e) {
+				System.out.println("la date n'est pas au bon format, réessayez!");
+			}
+
+			
 		}
 	}
 
-
-	//	Menu menu1 = new Menu();
-	//	Scanner sc = new Scanner(System.in);
-	//	String string = sc.nextLine();
-	//	
-	//	System.out.println(string+string);
-	//	
-	//	sc.close();
+	// Menu menu1 = new Menu();
+	// Scanner sc = new Scanner(System.in);
+	// String string = sc.nextLine();
+	//
+	// System.out.println(string+string);
+	//
+	// sc.close();
 }
