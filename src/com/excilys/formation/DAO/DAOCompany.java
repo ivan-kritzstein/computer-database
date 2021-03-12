@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.formation.mapper.MapperCompany;
 import com.excilys.formation.model.Company;
 
 public class DAOCompany extends DAO<Company> {
 
+	MapperCompany mapCompany = new MapperCompany();
 	public DAOCompany(Connection conn) {
 		super(conn);
 	}
@@ -112,16 +114,14 @@ public class DAOCompany extends DAO<Company> {
 		return company;
 	}
 
-	public ResultSet getListSql() {
+	public List<Company> list() {
 		List<Company> listeCompany = new ArrayList<Company>();
 
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery("SELECT * FROM company");
-			while (result.next()) {
-				listeCompany.add(new Company(result.getLong("id"), result.getString("name")));
-			}
+			mapCompany.dataSqlToCompany(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

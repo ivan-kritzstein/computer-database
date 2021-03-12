@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.formation.DAO.DAOComputer;
 import com.excilys.formation.model.Computer;
 
 public class MapperComputer {

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Computer {
 	private String name = "";
 	private Long id = null;
-	private Long company_id = null;
+	private Company company;
 	private LocalDate introduced = null;
 	private LocalDate discontinued = null;
 
@@ -13,12 +13,12 @@ public class Computer {
 
 	}
 
-	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long company_id) {
+	public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.company_id = company_id;
+		this.company = company;
 	}
 
 	public String getName() {
@@ -53,17 +53,17 @@ public class Computer {
 		this.discontinued = discontinued;
 	}
 
-	public Long getCompany_id() {
-		return company_id;
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setCompany_id(Long company_id) {
-		this.company_id = company_id;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	public String toString() {
 
 		return "id = " + id + " name = " + name + " introduced date = " + introduced + " discontinued date = "
-				+ discontinued + " company id = " + company_id;
+				+ discontinued + " company id = " + company.getId();
 	}
 }

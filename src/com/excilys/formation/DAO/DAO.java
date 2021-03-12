@@ -47,6 +47,6 @@ public abstract class DAO<T> {
 
 	public abstract T showDetailsWithName(String name);
 
-	public abstract ResultSet getListSql();
+	public abstract List<T> list();
 
 }

@@ -7,12 +7,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.catalina.mapper.Mapper;
+
+import com.excilys.formation.mapper.MapperComputer;
 import com.excilys.formation.model.Computer;
 
 public class DAOComputer extends DAO<Computer> {
 
+	MapperComputer mapComputer;
 	public DAOComputer(Connection conn) {
 		super(conn);
+		mapComputer = new MapperComputer();
 	}
 
 	public void create(Computer computer) {
@@ -24,7 +29,7 @@ public class DAOComputer extends DAO<Computer> {
 			preparedSelect.setString(1, computer.getName());
 			preparedSelect.setDate(2, java.sql.Date.valueOf(computer.getIntroduced()));
 			preparedSelect.setDate(3, java.sql.Date.valueOf(computer.getDiscontinued()));
-			preparedSelect.setLong(4, computer.getCompany_id());
+			preparedSelect.setObject(4, computer.getCompany().getId());
 			preparedSelect.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -126,45 +131,19 @@ public class DAOComputer extends DAO<Computer> {
 		return computer;
 	}
 	
-	public ResultSet getListSql() {
+	public List<Computer> list() {
 		ResultSet result = null;
+		List<Computer> listeComputer = new ArrayList<Computer>();
 		try {
 			result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery("SELECT * FROM computer");
+			listeComputer = mapComputer.dataSqlToComputer(result);
 			
-//			while (result.next()) {
-//				Long id = null;
-//				String name = null;
-//				LocalDate introduced = null;
-//				LocalDate discontinued = null;
-//				Long company_id = null;
-//				
-//				if (result.getString("name") != null) {
-//					name = result.getString("name");
-//				}
-//				if (result.getDate("introduced") != null) {
-//					introduced = result.getDate("introduced").toLocalDate();
-//				}
-//				if (result.getDate("discontinued") != null) {
-//					discontinued = result.getDate("discontinued").toLocalDate();
-//				}
-//				if (result.getLong("company_id") != 0) {
-//					company_id = result.getLong("company_id");
-//				}
-//				
-//
-//				listeComputer.add(new Computer(
-//						id, 
-//						name,
-//						introduced, 
-//						discontinued,
-//						company_id));
-//			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return listeComputer;
 	}
 
 }
