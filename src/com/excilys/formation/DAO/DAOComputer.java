@@ -1,4 +1,5 @@
 package com.excilys.formation.DAO;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,11 +11,13 @@ import java.util.List;
 import org.apache.catalina.mapper.Mapper;
 
 import com.excilys.formation.mapper.MapperComputer;
+import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
 
 public class DAOComputer extends DAO<Computer> {
 
 	MapperComputer mapComputer;
+
 	public DAOComputer(Connection conn) {
 		super(conn);
 		mapComputer = new MapperComputer();
@@ -64,7 +67,7 @@ public class DAOComputer extends DAO<Computer> {
 			preparedUpdate.setString(2, computer.getName());
 			preparedUpdate.setDate(3, java.sql.Date.valueOf(computer.getIntroduced()));
 			preparedUpdate.setDate(4, java.sql.Date.valueOf(computer.getDiscontinued()));
-			preparedUpdate.setLong(5, computer.getCompany_id());
+			preparedUpdate.setObject(5, computer.getCompany().getId());
 			preparedUpdate.setLong(6, id);
 			preparedUpdate.execute();
 		} catch (SQLException e) {
@@ -85,7 +88,7 @@ public class DAOComputer extends DAO<Computer> {
 			preparedUpdate.setString(2, computer.getName());
 			preparedUpdate.setDate(3, java.sql.Date.valueOf(computer.getIntroduced()));
 			preparedUpdate.setDate(4, java.sql.Date.valueOf(computer.getDiscontinued()));
-			preparedUpdate.setLong(5, computer.getCompany_id());
+			preparedUpdate.setObject(5, computer.getCompany().getId());
 			preparedUpdate.setString(6, name);
 			preparedUpdate.execute();
 		} catch (SQLException e) {
@@ -97,14 +100,16 @@ public class DAOComputer extends DAO<Computer> {
 
 	public Computer showDetailsWithId(Long id) {
 		Computer computer = new Computer();
-
+		Company company = new Company();
 		try {
 			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM computer WHERE id  = " + id);
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
+							"SELECT computer.id, computer.name, introduced, discontinued, company.id FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE company.id  = "
+									+ id);
 			if (result.first()) {
-				computer = new Computer(id, result.getString("name"), result.getDate("introduced").toLocalDate(),
-						result.getDate("discontinued").toLocalDate(), result.getLong("company_id"));
+				company.setId(result.getLong("company.id"));
+				computer = new Computer(id, result.getString("computer.name"), result.getDate("introduced").toLocalDate(),
+						result.getDate("discontinued").toLocalDate(), company);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -112,34 +117,35 @@ public class DAOComputer extends DAO<Computer> {
 		return computer;
 	}
 
-	public Computer showDetailsWithName(String name) {
+	public Computer showDetailsWithName(String name) { // NPE date, changer requete egalement voir mapper computer
 		Computer computer = new Computer();
+		Company company = new Company();
 
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM computer WHERE name  = " + name);
+					.executeQuery("SELECT computer.id, computer.name, introduced, discontinued, company.id FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE company.name  = " + name);
 			if (result.first()) {
+				company.setId(result.getLong("company.id"));
 				computer = new Computer(
 
 						result.getLong("id"), name, result.getDate("introduced").toLocalDate(),
-						result.getDate("discontinued").toLocalDate(), result.getLong("company_id"));
+						result.getDate("discontinued").toLocalDate(), company);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return computer;
 	}
-	
+
 	public List<Computer> list() {
 		ResultSet result = null;
 		List<Computer> listeComputer = new ArrayList<Computer>();
 		try {
-			result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery("SELECT * FROM computer");
 			listeComputer = mapComputer.dataSqlToComputer(result);
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

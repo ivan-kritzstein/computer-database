@@ -152,6 +152,7 @@ public class UseMenu {
 		String input;
 		DAOComputer daoc = new DAOComputer(con);
 		Long id = null;
+		Company company = new Company();
 		input = sc.nextLine();
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy MM dd");
 		while (!input.startsWith("0")) {
@@ -165,9 +166,9 @@ public class UseMenu {
 				
 				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
 				menuP.createInstructions4();
-				Long company_id = Long.parseLong(sc.nextLine());
+				company.setId(Long.parseLong(sc.nextLine()));
 
-				Computer computer = new Computer(id, name, introduced, discontinued, company_id);
+				Computer computer = new Computer(id, name, introduced, discontinued, company);
 			} catch (DateTimeParseException e) {
 				System.out.println("la date n'est pas au bon format, réessayez!");
 			}

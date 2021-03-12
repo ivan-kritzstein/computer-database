@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
 
 public class MapperComputer {
@@ -19,8 +20,11 @@ public class MapperComputer {
 			String name = null;
 			LocalDate introduced = null;
 			LocalDate discontinued = null;
-			Long company_id = null;
+			Company company = null;
 
+			if (result.getLong("id") != 0) {
+				id = result.getLong("id");
+			}
 			if (result.getString("name") != null) {
 				name = result.getString("name");
 			}
@@ -31,15 +35,16 @@ public class MapperComputer {
 				discontinued = result.getDate("discontinued").toLocalDate();
 			}
 			if (result.getLong("company_id") != 0) {
-				company_id = result.getLong("company_id");
+				company = new Company();
+				company.setId(result.getLong("company_id"));
 			}
 
-			listeComputer.add(new Computer(id, name, introduced, discontinued, company_id));
+			listeComputer.add(new Computer(id, name, introduced, discontinued, company));
 		}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return listeComputer;
 	}
-
+// extraire le mapper pour un computer et passer ce mapper dans une boucle pour la liste
 }
