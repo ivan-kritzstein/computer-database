@@ -1,4 +1,4 @@
-package com.excilys.formation.view;
+package com.excilys.formation.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,6 +12,7 @@ import com.excilys.formation.DAO.DAOComputer;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.model.Data;
+import com.excilys.formation.view.Menu;
 
 public class UseMenu {
 
@@ -80,11 +81,6 @@ public class UseMenu {
 			}
 		}
 		sc.close();
-
-		// DAOComputer daoc = new DAOComputer (con);
-		// DAOCompany daocp = new DAOCompany(con);
-		// Company comp = new Company (44, "company test");
-		// daocp.updateByName("company test", comp);
 		try {
 			con.close();
 		} catch (SQLException e) {
@@ -163,25 +159,18 @@ public class UseMenu {
 
 				LocalDate introduced = LocalDate.parse(sc.nextLine(), df);
 				menuP.createInstructions3();
-				
+
 				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
 				menuP.createInstructions4();
 				company.setId(Long.parseLong(sc.nextLine()));
 
-				Computer computer = new Computer(id, name, introduced, discontinued, company);
+				Computer computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
+						.setDiscontinued(discontinued).setCompany(company).build();
+				daoc.create(computer);
 			} catch (DateTimeParseException e) {
 				System.out.println("la date n'est pas au bon format, réessayez!");
 			}
 
-			
 		}
 	}
-
-	// Menu menu1 = new Menu();
-	// Scanner sc = new Scanner(System.in);
-	// String string = sc.nextLine();
-	//
-	// System.out.println(string+string);
-	//
-	// sc.close();
 }

@@ -1,6 +1,6 @@
 package com.excilys.formation.model;
 
-import com.excilys.formation.view.UseMenu;
+import com.excilys.formation.controller.UseMenu;
 
 public class Main {
 

@@ -99,17 +99,13 @@ public class DAOComputer extends DAO<Computer> {
 	}
 
 	public Computer showDetailsWithId(Long id) {
-		Computer computer = new Computer();
-		Company company = new Company();
+		Computer computer = new Computer.ComputerBuilder().build();
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(
-							"SELECT computer.id, computer.name, introduced, discontinued, company.id FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE company.id  = "
-									+ id);
+							"SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.id  = " + id);
 			if (result.first()) {
-				company.setId(result.getLong("company.id"));
-				computer = new Computer(id, result.getString("computer.name"), result.getDate("introduced").toLocalDate(),
-						result.getDate("discontinued").toLocalDate(), company);
+				computer = mapComputer.dataSqlToComputer(result);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -118,19 +114,14 @@ public class DAOComputer extends DAO<Computer> {
 	}
 
 	public Computer showDetailsWithName(String name) { // NPE date, changer requete egalement voir mapper computer
-		Computer computer = new Computer();
-		Company company = new Company();
+		Computer computer = new Computer.ComputerBuilder().build();
 
 		try {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT computer.id, computer.name, introduced, discontinued, company.id FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE company.name  = " + name);
+					.executeQuery("SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name  = " + "'" + name + "'");
 			if (result.first()) {
-				company.setId(result.getLong("company.id"));
-				computer = new Computer(
-
-						result.getLong("id"), name, result.getDate("introduced").toLocalDate(),
-						result.getDate("discontinued").toLocalDate(), company);
+				computer = mapComputer.dataSqlToComputer(result);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -144,7 +135,7 @@ public class DAOComputer extends DAO<Computer> {
 		try {
 			result = this.connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery("SELECT * FROM computer");
-			listeComputer = mapComputer.dataSqlToComputer(result);
+			listeComputer = mapComputer.dataSqlToListComputer(result);
 
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -90,7 +90,7 @@ public class DAOCompany extends DAO<Company> {
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery("SELECT * FROM company WHERE id  = " + id);
 			if (result.first()) {
-				company = new Company(id, result.getString("name"));
+				company = mapCompany.dataSqlToCompany(result);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -106,7 +106,7 @@ public class DAOCompany extends DAO<Company> {
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery("SELECT * FROM company WHERE name  = '" + name + "'");
 			if (result.first()) {
-				company = new Company(result.getLong("id"), name);
+				company = mapCompany.dataSqlToCompany(result);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,7 +121,7 @@ public class DAOCompany extends DAO<Company> {
 			ResultSet result = this.connect
 					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
 					.executeQuery("SELECT * FROM company");
-			mapCompany.dataSqlToCompany(result);
+			listeCompany = mapCompany.dataSqlToListCompany(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -9,11 +9,26 @@ import com.excilys.formation.model.Company;
 
 public class MapperCompany {
 
-	public List<Company> dataSqlToCompany(ResultSet result) {
+	public Company dataSqlToCompany(ResultSet result) {
+		Company company = new Company();
+		String name = null;
+		try {
+			if (result.getString("name") != null) {
+				name = result.getString("name");
+			}
+			company = new Company(result.getLong("id"), name);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return company;
+	}
+
+	public List<Company> dataSqlToListCompany(ResultSet result) {
 		List<Company> listeCompany = new ArrayList<Company>();
 		try {
 			while (result.next()) {
-				listeCompany.add(new Company(result.getLong("id"), result.getString("name")));
+				listeCompany.add(dataSqlToCompany(result));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -21,4 +36,5 @@ public class MapperCompany {
 		}
 		return listeCompany;
 	}
+
 }
