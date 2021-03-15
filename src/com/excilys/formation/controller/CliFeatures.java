@@ -1,7 +1,6 @@
 package com.excilys.formation.controller;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -11,86 +10,13 @@ import com.excilys.formation.DAO.DAOCompany;
 import com.excilys.formation.DAO.DAOComputer;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
-import com.excilys.formation.model.Data;
 import com.excilys.formation.view.Menu;
 
-public class UseMenu {
+public class CliFeatures {
 
 	Menu menuP = new Menu();
 	Scanner sc = new Scanner(System.in);
 	Connection con;
-
-	public UseMenu() {
-		// ouvre menu 1
-		Data data = new Data();
-		try {
-			con = data.getConnection();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	public void useMenuP() {
-		menuP.menuPrincipal();
-		int userEntry = 0;
-		while (userEntry != 100) {
-
-			userEntry = Integer.parseInt(sc.nextLine());
-
-			switch (userEntry) {
-			case 0:
-				menuP.menuPrincipal();
-				break;
-
-			case 1:
-				listCompanies();
-				menuP.retourMenuPrincipal();
-				break;
-
-			case 2:
-				menuP.menuShowCompanyDetails();
-				showCompanyDetails();
-				menuP.menuPrincipal();
-
-				break;
-			case 3:
-				listComputer();
-				menuP.retourMenuPrincipal();
-				break;
-			case 4:
-				menuP.menuShowComputerDetails();
-				showComputerDetails();
-				menuP.menuPrincipal();
-
-				break;
-			case 5:
-				menuP.menuCreateComputer();
-				createComputer();
-				break;
-			case 6:
-
-				break;
-			case 7:
-
-				break;
-			default:
-				break;
-			}
-		}
-		sc.close();
-		try {
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// création et utilisation Scanner
-
-	}
 
 	public void listCompanies() {
 		DAOCompany daocp = new DAOCompany(con);
@@ -149,20 +75,25 @@ public class UseMenu {
 		DAOComputer daoc = new DAOComputer(con);
 		Long id = null;
 		Company company = new Company();
+		company.setId(null);
 		input = sc.nextLine();
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy MM dd");
 		while (!input.startsWith("0")) {
 			try {
 				menuP.createInstructions1();
 				String name = sc.nextLine();
+
 				menuP.createInstructions2();
-
 				LocalDate introduced = LocalDate.parse(sc.nextLine(), df);
-				menuP.createInstructions3();
 
+				menuP.createInstructions3();
 				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
+
 				menuP.createInstructions4();
-				company.setId(Long.parseLong(sc.nextLine()));
+				input = sc.nextLine();
+				if (input != "") {
+					company.setId(Long.parseLong(input));
+				} 
 
 				Computer computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
 						.setDiscontinued(discontinued).setCompany(company).build();
@@ -172,5 +103,9 @@ public class UseMenu {
 			}
 
 		}
+	}
+
+	public void updateComputer() {
+
 	}
 }

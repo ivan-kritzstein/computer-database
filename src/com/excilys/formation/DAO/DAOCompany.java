@@ -4,17 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.formation.mapper.MapperCompany;
 import com.excilys.formation.model.Company;
+import com.excilys.formation.model.Data;
 
-public class DAOCompany extends DAO<Company> {
+public class DAOCompany { // extends DAO<Company> {
 
+	protected Data connect = Data.getInstance();
 	MapperCompany mapCompany = new MapperCompany();
+
 	public DAOCompany(Connection conn) {
-		super(conn);
+//		super(conn);
 	}
 
 	public void create(Company company) {
@@ -22,8 +26,8 @@ public class DAOCompany extends DAO<Company> {
 		String request = "INSERT INTO company (name) VALUES (?)";
 
 		PreparedStatement preparedSelect;
-		try {
-			preparedSelect = connect.prepareStatement(request);
+		try (Connection con = connect.getConnection()) {
+			preparedSelect = con.prepareStatement(request);
 			preparedSelect.setString(1, company.getName());
 			preparedSelect.execute();
 		} catch (SQLException e) {
@@ -37,8 +41,8 @@ public class DAOCompany extends DAO<Company> {
 		String request = "delete from company where id = ?";
 
 		PreparedStatement preparedDelete;
-		try {
-			preparedDelete = connect.prepareStatement(request);
+		try (Connection con = connect.getConnection()) {
+			preparedDelete = con.prepareStatement(request);
 			preparedDelete.setLong(1, id);
 			preparedDelete.execute();
 
@@ -53,8 +57,8 @@ public class DAOCompany extends DAO<Company> {
 
 		PreparedStatement preparedUpdate;
 
-		try {
-			preparedUpdate = connect.prepareStatement(request);
+		try (Connection con = connect.getConnection()) {
+			preparedUpdate = con.prepareStatement(request);
 			preparedUpdate.setLong(1, company.getId());
 			preparedUpdate.setString(2, company.getName());
 			preparedUpdate.execute();
@@ -70,8 +74,8 @@ public class DAOCompany extends DAO<Company> {
 
 		PreparedStatement preparedUpdate;
 
-		try {
-			preparedUpdate = connect.prepareStatement(request);
+		try (Connection con = connect.getConnection()) {
+			preparedUpdate = con.prepareStatement(request);
 			preparedUpdate.setLong(1, company.getId());
 			preparedUpdate.setString(2, company.getName());
 			System.out.println(preparedUpdate.toString());
@@ -85,10 +89,9 @@ public class DAOCompany extends DAO<Company> {
 	public Company showDetailsWithId(Long id) {
 		Company company = new Company();
 
-		try {
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM company WHERE id  = " + id);
+		try (Connection con = connect.getConnection()) {
+			Statement statement = con.createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM company WHERE id  = " + id);
 			if (result.first()) {
 				company = mapCompany.dataSqlToCompany(result);
 			}
@@ -101,10 +104,9 @@ public class DAOCompany extends DAO<Company> {
 	public Company showDetailsWithName(String name) {
 		Company company = null;
 
-		try {
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM company WHERE name  = '" + name + "'");
+		try (Connection con = connect.getConnection()) {
+			Statement statement = con.createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM company WHERE name  = '" + name + "'");
 			if (result.first()) {
 				company = mapCompany.dataSqlToCompany(result);
 			}
@@ -117,10 +119,9 @@ public class DAOCompany extends DAO<Company> {
 	public List<Company> list() {
 		List<Company> listeCompany = new ArrayList<Company>();
 
-		try {
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM company");
+		try (Connection con = connect.getConnection()) {
+			Statement statement = con.createStatement();
+			ResultSet result = statement.executeQuery("SELECT * FROM company");
 			listeCompany = mapCompany.dataSqlToListCompany(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
