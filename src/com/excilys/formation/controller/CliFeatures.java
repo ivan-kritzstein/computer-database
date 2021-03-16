@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 import java.util.Scanner;
 
 import com.excilys.formation.DAO.DAOCompany;
@@ -20,8 +21,8 @@ public class CliFeatures {
 
 	public void listCompanies() {
 		DAOCompany daocp = new DAOCompany(con);
-		for (Company c : daocp.list()) {
-			System.out.println(c);
+		for (Optional<Company> c : daocp.list()) {
+			System.out.println(c.orElse(null));
 		}
 		// DAOCompany daocp =
 	}
@@ -33,10 +34,10 @@ public class CliFeatures {
 		while (!input.startsWith("0")) {
 			try {
 				Long idDetails = Long.parseLong(input);
-				System.out.println(daocp.showDetailsWithId(idDetails));
+				System.out.println(daocp.showDetailsWithId(idDetails).orElse(null));
 			} catch (NumberFormatException e) {
 				String nameDetails = input;
-				System.out.println(daocp.showDetailsWithName(nameDetails));
+				System.out.println(daocp.showDetailsWithName(nameDetails).orElse(null));
 			}
 
 			menuP.retourMenuPrincipal();
@@ -46,8 +47,8 @@ public class CliFeatures {
 
 	public void listComputer() {
 		DAOComputer daoc = new DAOComputer(con);
-		for (Computer c : daoc.list()) {
-			System.out.println(c);
+		for (Optional<Computer> c : daoc.list()) {
+			System.out.println(c.orElse(null));
 		}
 		// DAOCompany daocp =
 	}
@@ -59,10 +60,10 @@ public class CliFeatures {
 		while (!input.startsWith("0")) {
 			try {
 				Long idDetails = Long.parseLong(input);
-				System.out.println(daoc.showDetailsWithId(idDetails));
+				System.out.println(daoc.showDetailsWithId(idDetails).orElse(null));
 			} catch (NumberFormatException e) {
 				String nameDetails = input;
-				System.out.println(daoc.showDetailsWithName(nameDetails));
+				System.out.println(daoc.showDetailsWithName(nameDetails).orElse(null));
 			}
 
 			menuP.retourMenuPrincipal();
@@ -75,7 +76,8 @@ public class CliFeatures {
 		DAOComputer daoc = new DAOComputer(con);
 		Long id = null;
 		Company company = new Company();
-		company.setId(null);
+//		company.setId(null);
+		System.out.println("Taper sur Entrer pour commencer!");
 		input = sc.nextLine();
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy MM dd");
 		while (!input.startsWith("0")) {
@@ -83,9 +85,11 @@ public class CliFeatures {
 				menuP.createInstructions1();
 				String name = sc.nextLine();
 
+				
 				menuP.createInstructions2();
 				LocalDate introduced = LocalDate.parse(sc.nextLine(), df);
-
+				
+				
 				menuP.createInstructions3();
 				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
 

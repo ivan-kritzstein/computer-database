@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.excilys.formation.mapper.MapperCompany;
 import com.excilys.formation.model.Company;
@@ -86,11 +87,11 @@ public class DAOCompany { // extends DAO<Company> {
 		}
 	}
 
-	public Company showDetailsWithId(Long id) {
-		Company company = new Company();
+	public Optional<Company> showDetailsWithId(Long id) {
+		Optional<Company> company = Optional.ofNullable(new Company());
 
 		try (Connection con = connect.getConnection()) {
-			Statement statement = con.createStatement();
+			Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet result = statement.executeQuery("SELECT * FROM company WHERE id  = " + id);
 			if (result.first()) {
 				company = mapCompany.dataSqlToCompany(result);
@@ -101,11 +102,11 @@ public class DAOCompany { // extends DAO<Company> {
 		return company;
 	}
 
-	public Company showDetailsWithName(String name) {
-		Company company = null;
+	public Optional<Company> showDetailsWithName(String name) {
+		Optional<Company> company = Optional.ofNullable(new Company());
 
 		try (Connection con = connect.getConnection()) {
-			Statement statement = con.createStatement();
+			Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			ResultSet result = statement.executeQuery("SELECT * FROM company WHERE name  = '" + name + "'");
 			if (result.first()) {
 				company = mapCompany.dataSqlToCompany(result);
@@ -116,8 +117,8 @@ public class DAOCompany { // extends DAO<Company> {
 		return company;
 	}
 
-	public List<Company> list() {
-		List<Company> listeCompany = new ArrayList<Company>();
+	public List<Optional<Company>> list() {
+		List<Optional<Company>> listeCompany = new ArrayList<Optional<Company>>();
 
 		try (Connection con = connect.getConnection()) {
 			Statement statement = con.createStatement();

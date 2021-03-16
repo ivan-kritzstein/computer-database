@@ -3,11 +3,11 @@ package com.excilys.formation.model;
 import java.time.LocalDate;
 
 public class Computer {
-	private String name = "";
-	private Long id = null;
+	private String name;
+	private Long id;
 	private Company company;
-	private LocalDate introduced = null;
-	private LocalDate discontinued = null;
+	private LocalDate introduced;
+	private LocalDate discontinued;
 
 
 // passer en privé cstr

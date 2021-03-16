@@ -2,8 +2,8 @@ package com.excilys.formation.model;
 //list companies 
 
 public class Company {
-	private String name = "test";
-	private Long id = null;
+	private String name;
+	private Long id;
 	
 	public Company() {
 		
