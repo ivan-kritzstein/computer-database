@@ -76,20 +76,17 @@ public class CliFeatures {
 		DAOComputer daoc = new DAOComputer(con);
 		Long id = null;
 		Company company = new Company();
-//		company.setId(null);
 		System.out.println("Taper sur Entrer pour commencer!");
-		input = sc.nextLine();
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy MM dd");
+		input = sc.nextLine();
 		while (!input.startsWith("0")) {
 			try {
 				menuP.createInstructions1();
 				String name = sc.nextLine();
 
-				
 				menuP.createInstructions2();
 				LocalDate introduced = LocalDate.parse(sc.nextLine(), df);
-				
-				
+
 				menuP.createInstructions3();
 				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
 
@@ -97,7 +94,7 @@ public class CliFeatures {
 				input = sc.nextLine();
 				if (input != "") {
 					company.setId(Long.parseLong(input));
-				} 
+				}
 
 				Computer computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
 						.setDiscontinued(discontinued).setCompany(company).build();
@@ -106,10 +103,61 @@ public class CliFeatures {
 				System.out.println("la date n'est pas au bon format, réessayez!");
 			}
 
+			menuP.retourMenuPrincipal();
+			input = sc.nextLine();
 		}
 	}
 
 	public void updateComputer() {
 
+		String input;
+		DAOComputer daoc = new DAOComputer(con);
+		Long idAModifier;
+		Company company = new Company();
+		System.out.println("Taper l'id de l'ordinateur à modifier");
+		idAModifier = Long.parseLong(sc.nextLine());
+		System.out.println("Taper sur Entrer pour commencer!");
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy MM dd");
+		while (!sc.nextLine().startsWith("0")) {
+			try {
+				menuP.createInstructions1();
+				String name = sc.nextLine();
+
+				menuP.createInstructions2();
+				LocalDate introduced = LocalDate.parse(sc.nextLine(), df);
+
+				menuP.createInstructions3();
+				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
+
+				menuP.createInstructions4();
+				input = sc.nextLine();
+				if (input != "") {
+					company.setId(Long.parseLong(input));
+				}
+
+				Computer computer = new Computer.ComputerBuilder().setId(idAModifier).setName(name)
+						.setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
+				daoc.updateById(idAModifier, computer);
+			} catch (DateTimeParseException e) {
+				System.out.println("la date n'est pas au bon format, réessayez!");
+			}
+			menuP.retourMenuPrincipal();
+			input = sc.nextLine();
+		}
+	}
+
+	public void deleteComputer() {
+		System.out.println("Taper l'id de l'ordinateur à supprimer");
+		String input;
+		DAOComputer daoc = new DAOComputer(con);
+		input = sc.nextLine();
+		while (!input.startsWith("0")) {
+
+			Long idDelete = Long.parseLong(input);
+			daoc.delete(idDelete);
+
+			menuP.retourMenuPrincipal();
+			input = sc.nextLine();
+		}
 	}
 }

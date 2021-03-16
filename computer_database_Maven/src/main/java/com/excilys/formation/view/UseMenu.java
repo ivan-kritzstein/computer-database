@@ -15,10 +15,9 @@ public class UseMenu {
 	CliFeatures cliFeatures = new CliFeatures();
 
 	public UseMenu() {
-		// ouvre menu 1
 		Data data = Data.getInstance();
 		try {
-			con = data.getConnection(); // ouvrir con dans try with ressources du dao
+			con = data.getConnection();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -63,12 +62,17 @@ public class UseMenu {
 			case 5:
 				menuP.menuCreateComputer();
 				cliFeatures.createComputer();
+				menuP.menuPrincipal();
 				break;
 			case 6:
-
+				System.out.println(Menu.SEPARATE);
+				cliFeatures.updateComputer();
+				menuP.menuPrincipal();
 				break;
 			case 7:
-
+				System.out.println(Menu.SEPARATE);
+				cliFeatures.deleteComputer();
+				menuP.menuPrincipal();
 				break;
 			default:
 				break;

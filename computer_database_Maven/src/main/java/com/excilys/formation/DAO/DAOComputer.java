@@ -18,7 +18,7 @@ public class DAOComputer { // extends DAO<Computer> {
 	protected Data connect = Data.getInstance();
 	MapperComputer mapComputer;
 	private static final String REQUEST_CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)"; 
-	private static final String REQUEST_DELETE = "delete computer where id=?"; 
+	private static final String REQUEST_DELETE = "delete FROM computer where id=?"; 
 	private static final String REQUEST_UPDATE_BY_ID = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?"; 
 	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?"; 
 	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id  = "; 

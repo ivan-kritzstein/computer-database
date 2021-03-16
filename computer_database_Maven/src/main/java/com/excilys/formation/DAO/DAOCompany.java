@@ -13,13 +13,12 @@ import com.excilys.formation.mapper.MapperCompany;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Data;
 
-public class DAOCompany { // extends DAO<Company> {
+public class DAOCompany {
 
 	protected Data connect = Data.getInstance();
 	MapperCompany mapCompany = new MapperCompany();
 
 	public DAOCompany(Connection conn) {
-//		super(conn);
 	}
 
 	public void create(Company company) {
