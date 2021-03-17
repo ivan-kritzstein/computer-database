@@ -9,11 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.mapper.MapperComputer;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.model.Data;
+import com.excilys.formation.view.Page;
 
-public class DAOComputer { // extends DAO<Computer> {
+public class DAOComputer { 
 
 	protected Data connect = Data.getInstance();
 	MapperComputer mapComputer;
@@ -23,8 +27,8 @@ public class DAOComputer { // extends DAO<Computer> {
 	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?"; 
 	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id  = "; 
 	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name  = "; 
-	private static final String REQUEST_LIST = "SELECT id, name, introduced, discontinued, company_id FROM computer"; 
-
+	private static final String REQUEST_LIST = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ? OFFSET ?"; 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DAOComputer.class);
 	
 	public DAOComputer(Connection conn) {
 		mapComputer = new MapperComputer();
@@ -42,7 +46,7 @@ public class DAOComputer { // extends DAO<Computer> {
 			preparedSelect.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 
 	}
@@ -57,7 +61,7 @@ public class DAOComputer { // extends DAO<Computer> {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -75,7 +79,7 @@ public class DAOComputer { // extends DAO<Computer> {
 			preparedUpdate.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 
 	}
@@ -95,7 +99,7 @@ public class DAOComputer { // extends DAO<Computer> {
 			preparedUpdate.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 
 	}
@@ -109,7 +113,7 @@ public class DAOComputer { // extends DAO<Computer> {
 				computer = mapComputer.dataSqlToComputer(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return computer;
 	}
@@ -124,20 +128,23 @@ public class DAOComputer { // extends DAO<Computer> {
 				computer = mapComputer.dataSqlToComputer(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return computer;
 	}
 
-	public List<Optional<Computer>> list() {
+	public List<Optional<Computer>> list(Page page) {
 		List<Optional<Computer>> listeComputer = new ArrayList<Optional<Computer>>();
-		try (Connection con = connect.getConnection()) {
-			Statement statement = con.createStatement();
-			ResultSet result = statement.executeQuery(REQUEST_LIST);
+		
+		try (Connection con = connect.getConnection(); PreparedStatement prepareList = con.prepareStatement(REQUEST_LIST)) {
+			
+			prepareList.setInt(1, page.getLimit());
+			prepareList.setInt(2, page.getOffset());
+			ResultSet result = prepareList.executeQuery();
 			listeComputer = mapComputer.dataSqlToListComputer(result);
-
+			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return listeComputer;
 	}

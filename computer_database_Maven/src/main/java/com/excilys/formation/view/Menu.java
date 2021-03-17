@@ -11,7 +11,11 @@ public class Menu {
 	public static final String CHOICE_5 = "Taper 5 : Créer un nouvel ordinateur";
 	public static final String CHOICE_6 = "Taper 6 : Modifier un ordinateur";
 	public static final String CHOICE_7 = "Taper 7 : Supprimer un ordinateur";
-
+	public static final String INSTRUCTION_LIST = "Tapez 1 pour les 10 suivants et tapez 2 pour les 10 précédents";
+	public static final int SUIVANT = 1;
+	public static final int PRECEDENT = 2;
+	
+		
 	public void menuPrincipal() {
 		System.out.println(CHOICE_1);
 		System.out.println(SEPARATE);

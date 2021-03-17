@@ -17,34 +17,51 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-
+	
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
+		<!--https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.23</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		
+		
 		<dependency>
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		
 		<dependency>
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>3.8.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		
 		<dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>2.0.0-alpha1</version>
+			<version>1.7.30</version>
 		</dependency>
+		
+		<dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>junit</groupId>

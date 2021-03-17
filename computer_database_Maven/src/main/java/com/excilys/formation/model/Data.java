@@ -10,9 +10,10 @@ public class Data {
 	private static final String USER = "admincdb";
 	private static final String PASSWORD = "qwerty1234";
 	private static Data data;
-	
+	private Connection con;
+
 	private Data() {
-		
+
 	}
 
 	public static Data getInstance() {
@@ -21,14 +22,18 @@ public class Data {
 		}
 		return data;
 	}
-	public Connection getConnection() throws SQLException {
-		Connection con = DriverManager  // Connection : realiser la connexion et l'authentification à la base de données
-				// DriverManager : charger et configurer le driver de la base de données (driver = .jar)
-				.getConnection(URL, USER, PASSWORD); 
+
+	public Connection getConnection() { 
+		try {
+			con = DriverManager.getConnection(URL, USER, PASSWORD);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			
+		}
 		// use con here
 		return con;
 	}
 // 1 cstr rivate pour 1 sel objet 
-	// methode getInstance pour acceder a l'objet 
+	// methode getInstance pour acceder a l'objet
 	// attribut de l'objet data
 }
