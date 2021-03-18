@@ -25,8 +25,9 @@ public class Data {
 
 	public Connection getConnection() { 
 		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection(URL, USER, PASSWORD);
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			
 		}
