@@ -4,16 +4,17 @@ public class ComputerDto {
 
 	private String id;
 	private String name;
-	private String companyName;
+	private CompanyDto companyDto;
+	//private String companyName;
 	private String introduced;
 	private String discontinued;
 	
-	private ComputerDto(String id, String name, String introduced, String discontinued, String companyName) {
+	private ComputerDto(String id, String name, String introduced, String discontinued, CompanyDto companyDto) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.companyName = companyName;
+		this.companyDto = companyDto;
 	}
 	
 	public String getId() {
@@ -28,11 +29,11 @@ public class ComputerDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCompanyName() {
-		return companyName;
+	public CompanyDto getCompanyDto() {
+		return companyDto;
 	}
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
+	public void setCompanyDto(CompanyDto companyDto) {
+		this.companyDto = companyDto;
 	}
 	public String getDiscontinued() {
 		return discontinued;
@@ -53,7 +54,8 @@ public class ComputerDto {
 
 		private String id;
 		private String name;
-		private String companyName;
+		private CompanyDto companyDto;
+	//	private String companyName;
 		private String introduced;
 		private String discontinued;
 		
@@ -62,8 +64,8 @@ public class ComputerDto {
 			return this;
 		}
 
-		public ComputerDtoBuilder setCompanyName(String companyName) {
-			this.companyName = companyName;
+		public ComputerDtoBuilder setCompanyDto(CompanyDto companyDto) {
+			this.companyDto = companyDto;
 			return this;
 		}
 
@@ -83,7 +85,7 @@ public class ComputerDto {
 		}
 		
 		public ComputerDto build() {
-			return new ComputerDto(id, name, introduced, discontinued, companyName);
+			return new ComputerDto(id, name, introduced, discontinued, companyDto);
 		}
 		
 
@@ -93,8 +95,8 @@ public class ComputerDto {
 
 	@Override
 	public String toString() {
-		return "ComputerDto [id=" + id + ", name=" + name + ", companyName=" + companyName + ", introduced="
-				+ introduced + ", discontinued=" + discontinued + "]";
+		return "ComputerDto [id=" + id + ", name=" + name  + ", introduced="
+				+ introduced + ", discontinued=" + discontinued +  companyDto.toString() + "]";
 	}
 	
 }

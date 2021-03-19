@@ -9,13 +9,12 @@ public class Computer {
 	private LocalDate introduced;
 	private LocalDate discontinued;
 
-
 // passer en privé cstr
-	//dans le builder que le set
+	// dans le builder que le set
 //	get de classe computer
 	// class computer builder : que des set qui renvoient computerbuilder
 	// avantages : que 1 seul constructeur
-	
+
 	private Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
 		this.id = id;
 		this.name = name;
@@ -63,7 +62,7 @@ public class Computer {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
+
 	public static class ComputerBuilder {
 
 		private String name = "";
@@ -96,7 +95,7 @@ public class Computer {
 			this.discontinued = discontinued;
 			return this;
 		}
-		
+
 		public Computer build() {
 			return new Computer(id, name, introduced, discontinued, company);
 		}
@@ -105,6 +104,6 @@ public class Computer {
 	public String toString() {
 
 		return "id = " + id + " name = " + name + " introduced date = " + introduced + " discontinued date = "
-				+ discontinued + " company id = " + (company != null ? company.getId() : null);
+				+ discontinued + company != null ? company.toString() : null;
 	}
 }

@@ -17,19 +17,20 @@ import com.excilys.formation.model.Computer;
 import com.excilys.formation.model.Data;
 import com.excilys.formation.view.Page;
 
-public class DAOComputer { 
+public class DAOComputer {
 
 	protected Data connect = Data.getInstance();
 	MapperComputer mapComputer;
-	private static final String REQUEST_CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)"; 
-	private static final String REQUEST_DELETE = "delete FROM computer where id=?"; 
-	private static final String REQUEST_UPDATE_BY_ID = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?"; 
-	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?"; 
-	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id  = "; 
-	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name  = "; 
-	private static final String REQUEST_LIST = "SELECT id, name, introduced, discontinued, company_id FROM computer LIMIT ? OFFSET ?"; 
+	private static final String REQUEST_CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
+	private static final String REQUEST_DELETE = "delete FROM computer where id=?";
+	private static final String REQUEST_UPDATE_BY_ID = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
+	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?";
+	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id  = ";
+	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name  = ";
+	private static final String REQUEST_LIST = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ? OFFSET ?";
+	private static final String NBR_COMPUTER = "SELECT COUNT(id) FROM computer";
 	private static final Logger LOGGER = LoggerFactory.getLogger(DAOComputer.class);
-	
+
 	public DAOComputer(Connection conn) {
 		mapComputer = new MapperComputer();
 	}
@@ -118,7 +119,8 @@ public class DAOComputer {
 		return computer;
 	}
 
-	public Optional<Computer> showDetailsWithName(String name) { // NPE date, changer requete egalement voir mapper computer
+	public Optional<Computer> showDetailsWithName(String name) { // NPE date, changer requete egalement voir mapper
+																	// computer
 		Optional<Computer> computer = Optional.ofNullable(new Computer.ComputerBuilder().build());
 
 		try (Connection con = connect.getConnection()) {
@@ -135,18 +137,33 @@ public class DAOComputer {
 
 	public List<Optional<Computer>> list(Page page) {
 		List<Optional<Computer>> listeComputer = new ArrayList<Optional<Computer>>();
-		
-		try (Connection con = connect.getConnection(); PreparedStatement prepareList = con.prepareStatement(REQUEST_LIST)) {
-			
+
+		try (Connection con = connect.getConnection();
+				PreparedStatement prepareList = con.prepareStatement(REQUEST_LIST)) {
 			prepareList.setInt(1, page.getLimit());
 			prepareList.setInt(2, page.getOffset());
 			ResultSet result = prepareList.executeQuery();
 			listeComputer = mapComputer.dataSqlToListComputer(result);
-			
+			page.setNbrComputer(sizeListComputer());
+
 		} catch (SQLException e) {
 			LOGGER.error(e.getMessage());
 		}
 		return listeComputer;
+	}
+
+	public int sizeListComputer() {
+		try (Connection con = connect.getConnection();
+				PreparedStatement prepareList = con.prepareStatement(NBR_COMPUTER)) {
+			ResultSet result = prepareList.executeQuery();
+			result.next();
+			return result.getInt("count(id)");
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e.getMessage());
+		}
+		return -1;
 	}
 
 }

@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.excilys.formation.Dto.ComputerDto;
 import com.excilys.formation.mapper.MapperComputerDto;
@@ -24,13 +25,13 @@ import com.excilys.formation.view.Page;
 @WebServlet("/ComputerServlet")
 public class ComputerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String NBR_COMUTERS = "numberComputer";
+	private static final String PAGE = "page";
 	private static final String LIST_COMPUTERS = "listComputer";
 
 	Computer computer;
 	Company company;
 	ComputerService computerService = new ComputerService();
-	Page page = new Page();
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -49,14 +50,30 @@ public class ComputerServlet extends HttpServlet {
 
 		List<ComputerDto> listeComputerDto = new ArrayList<ComputerDto>();
 		
-		listeComputerDto = MapperComputerDto.computerToListComputerDto(computerService.printComputerService(computerService.listComputerService(), page));
-		int nbrComputer = listeComputerDto.size();
-		System.out.println(nbrComputer);
+		HttpSession session = request.getSession();
+		if(session.getAttribute(PAGE) == null) {
+			session.setAttribute(PAGE, new Page());
+			
+		}
+		Page page = (Page) session.getAttribute(PAGE);
 		
-		request.setAttribute(NBR_COMUTERS,listeComputerDto.size());
+		listeComputerDto = MapperComputerDto.computerToListComputerDto(
+				computerService.printComputerService(computerService.listComputerService(), page));
+
+		List<Optional<Computer>> listC = computerService.printComputerService(computerService.listComputerService(), page);
 		
+		for (Optional<Computer> c : listC) {
+			System.out.println(c.orElse(null));
+		}
+
+		System.out.println(listeComputerDto.isEmpty());
 		request.setAttribute(LIST_COMPUTERS, listeComputerDto);
 		
+//		for (ComputerDto c : listeComputerDto) {
+//			System.out.println(c);
+//		}
+
+		session.setAttribute(PAGE, page);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
 

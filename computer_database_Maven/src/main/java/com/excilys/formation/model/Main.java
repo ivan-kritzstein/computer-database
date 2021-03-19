@@ -1,18 +1,14 @@
 package com.excilys.formation.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.excilys.formation.controller.ComputerController;
 import com.excilys.formation.view.UseMenu;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Logger logger = LoggerFactory.getLogger(ComputerController.class);
-	    logger.error("Infos sur la classe");
+		
 		UseMenu useMP = new UseMenu();
 		useMP.useMenuP();
+		
 	}
 
 }

@@ -21,5 +21,4 @@ public class CompanyController {
 		
 		return companyService.showCompanyDetailsNameSerive(nameDetails);
 	}
-
 }

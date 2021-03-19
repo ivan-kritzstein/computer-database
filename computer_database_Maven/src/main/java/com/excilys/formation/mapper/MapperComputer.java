@@ -31,7 +31,7 @@ public class MapperComputer {
 			if (result.getDate("discontinued") != null) {
 				discontinued = result.getDate("discontinued").toLocalDate();
 			}
-				company.setId(result.getLong("company_id"));
+				company = MapperCompany.dataSqlToCompany(result).orElse(null);
 
 			computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
 		} catch (SQLException e) {

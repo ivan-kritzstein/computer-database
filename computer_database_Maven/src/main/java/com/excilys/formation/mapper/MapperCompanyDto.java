@@ -7,12 +7,17 @@ public class MapperCompanyDto {
 
 	public static CompanyDto companyToCompanyDto(Company company) {
 		CompanyDto cmpnDto = new CompanyDto();
-
-		String id = company.getId().toString();
-		String name = company.getName().toString();
-
-		cmpnDto = new CompanyDto(id, name);
-
+		String id = null;
+		String name = null;
+		if (company != null) {
+			if (company.getId() != null) {
+				id = company.getId().toString();
+			}
+			if (company.getName() != null) {
+				name = company.getName();
+			}
+			cmpnDto = new CompanyDto(id, name);
+		}
 		return cmpnDto;
 	}
 }

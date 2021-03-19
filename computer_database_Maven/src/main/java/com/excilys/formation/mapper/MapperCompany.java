@@ -10,7 +10,7 @@ import com.excilys.formation.model.Company;
 
 public class MapperCompany {
 
-	public Optional<Company> dataSqlToCompany(ResultSet result) {
+	public static Optional<Company> dataSqlToCompany(ResultSet result) {
 		Optional<Company> company = Optional.empty();
 		try {
 //			if (result.getString("name") != null) {
