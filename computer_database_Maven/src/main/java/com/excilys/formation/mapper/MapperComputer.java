@@ -7,11 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
 
 public class MapperComputer {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(MapperComputer.class);
 	public Optional<Computer> dataSqlToComputer(ResultSet result) {
 
 		Computer computer = new Computer.ComputerBuilder().build();
@@ -35,7 +39,7 @@ public class MapperComputer {
 
 			computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return Optional.ofNullable(computer);
 	}
@@ -49,7 +53,7 @@ public class MapperComputer {
 				listeComputer.add(dataSqlToComputer(result));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 
 		return listeComputer;

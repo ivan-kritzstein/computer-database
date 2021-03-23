@@ -30,7 +30,7 @@ public class MapperComputerDto {
 			discontinued = computer.getDiscontinued().toString();
 		}
 
-			companyDto = MapperCompanyDto.companyToCompanyDto(computer.getCompany());
+		companyDto = MapperCompanyDto.companyToCompanyDto(computer.getCompany());
 
 		cmptDto = new ComputerDto.ComputerDtoBuilder().setId(id).setName(name).setIntroduced(introduced)
 				.setDiscontinued(discontinued).setCompanyDto(companyDto).build();
@@ -51,34 +51,38 @@ public class MapperComputerDto {
 		return list;
 
 	}
-	
+
 	public static Optional<Computer> computerDtoToComputer(ComputerDto cmptDto) {
 		Computer computer = new Computer.ComputerBuilder().build();
-		
+
 		Long id = null;
 		String name = null;
 		LocalDate introduced = null;
 		LocalDate discontinued = null;
 		CompanyDto companyDto = new CompanyDto();
 		Company company = new Company();
-		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd"); 
-		
+		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 		if (cmptDto.getId() != null) {
-		id = Long.parseLong(cmptDto.getId());	
+			id = Long.parseLong(cmptDto.getId());
 		}
-		name = cmptDto.getName();
-		
-		if (cmptDto.getIntroduced() != null) {
-		introduced = LocalDate.parse(cmptDto.getIntroduced(), df);
+
+		if (null != cmptDto.getName()) {
+			name = cmptDto.getName();
 		}
-		if (cmptDto.getDiscontinued() != null) {
-		discontinued = LocalDate.parse(cmptDto.getDiscontinued(), df);
+
+		if (null != cmptDto.getIntroduced() && cmptDto.getIntroduced().compareTo("") != 0) {
+			introduced = LocalDate.parse(cmptDto.getIntroduced(), df);
+		}
+		if (cmptDto.getDiscontinued() != null && cmptDto.getDiscontinued().compareTo("") != 0) {
+			discontinued = LocalDate.parse(cmptDto.getDiscontinued(), df);
 		}
 		companyDto = cmptDto.getCompanyDto();
 		company = MapperCompanyDto.companyDtoToCompany(companyDto);
-		
-		computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
-		
+
+		computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
+				.setDiscontinued(discontinued).setCompany(company).build();
+
 		return Optional.ofNullable(computer);
 	}
 

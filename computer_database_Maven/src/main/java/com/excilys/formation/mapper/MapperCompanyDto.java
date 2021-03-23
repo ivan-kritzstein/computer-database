@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.Dto.CompanyDto;
 import com.excilys.formation.Dto.ComputerDto;
 import com.excilys.formation.model.Company;

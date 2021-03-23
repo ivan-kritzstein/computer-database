@@ -9,14 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.mapper.MapperCompany;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Data;
+import com.excilys.formation.servlets.AddComputerServlet;
 
 public class DAOCompany {
 
 	protected Data connect = Data.getInstance();
 	MapperCompany mapCompany = new MapperCompany();
+	private static Logger LOGGER = LoggerFactory.getLogger(DAOCompany.class);
 
 	public DAOCompany(Connection conn) {
 	}
@@ -32,7 +37,7 @@ public class DAOCompany {
 			preparedSelect.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 
 	}
@@ -48,7 +53,7 @@ public class DAOCompany {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -64,7 +69,7 @@ public class DAOCompany {
 			preparedUpdate.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 
 	}
@@ -82,7 +87,7 @@ public class DAOCompany {
 			preparedUpdate.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 	}
 
@@ -96,7 +101,7 @@ public class DAOCompany {
 				company = mapCompany.dataSqlToCompany(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return company;
 	}
@@ -111,7 +116,7 @@ public class DAOCompany {
 				company = mapCompany.dataSqlToCompany(result);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return company;
 	}
@@ -124,7 +129,7 @@ public class DAOCompany {
 			ResultSet result = statement.executeQuery("SELECT * FROM company");
 			listeCompany = mapCompany.dataSqlToListCompany(result);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return listeCompany;
 	}

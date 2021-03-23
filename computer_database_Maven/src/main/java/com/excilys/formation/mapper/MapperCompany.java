@@ -6,9 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.formation.DAO.DAOCompany;
 import com.excilys.formation.model.Company;
 
 public class MapperCompany {
+	private static Logger LOGGER = LoggerFactory.getLogger(MapperCompany.class);
 
 	public static Optional<Company> dataSqlToCompany(ResultSet result) {
 		Optional<Company> company = Optional.empty();
@@ -19,7 +24,7 @@ public class MapperCompany {
 			company = Optional.ofNullable(new Company(result.getLong("id"), result.getString("name")));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return company;
 	}
@@ -32,7 +37,7 @@ public class MapperCompany {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		return listeCompany;
 	}

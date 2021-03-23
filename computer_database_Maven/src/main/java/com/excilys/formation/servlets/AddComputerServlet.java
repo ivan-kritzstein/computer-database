@@ -10,20 +10,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.Dto.CompanyDto;
 import com.excilys.formation.Dto.ComputerDto;
+import com.excilys.formation.controller.ComputerController;
+import com.excilys.formation.exceptions.InputException;
 import com.excilys.formation.mapper.MapperCompanyDto;
 import com.excilys.formation.mapper.MapperComputerDto;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.service.CompanyService;
 import com.excilys.formation.service.ComputerService;
+import com.excilys.formation.validation.ValidationComputer;
 
 /**
  * Servlet implementation class AddComputerServlet
  */
 @WebServlet("/AddComputerServlet")
 public class AddComputerServlet extends HttpServlet {
-	
+
 	private static final String COMPUTER_NAME = "computerName";
 	private static final String INTRODUCED = "introduced";
 	private static final String DISCONTINUED = "discontinued";
@@ -35,49 +41,62 @@ public class AddComputerServlet extends HttpServlet {
 	Computer computer;
 	ComputerDto cmptDto;
 	CompanyDto cmpnDto;
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public AddComputerServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	ValidationComputer verif = new ValidationComputer();
+	private static Logger LOGGER = LoggerFactory.getLogger(AddComputerServlet.class);
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public AddComputerServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		List<CompanyDto> listCmpnDto = new ArrayList<CompanyDto>();
-		
+
 		listCmpnDto = MapperCompanyDto.companyToListCompanyDto(companyService.listCompaniesService());
-		
-		for (CompanyDto c : listCmpnDto) {
-			System.out.println(c);
-		}
-		
+//
+//		for (CompanyDto c : listCmpnDto) {
+//			System.out.println(c);
+//		}
+
 		request.setAttribute(LIST_COMPANY, listCmpnDto);
-		
+
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	@Override 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		
+		// TODO Auto-generated method stub
+
 		String computerName = request.getParameter(COMPUTER_NAME);
 		String introduced = request.getParameter(INTRODUCED);
 		String discontinued = request.getParameter(DISCONTINUED);
 		String companyId = request.getParameter(COMPANY_ID);
-		
-		cmpnDto = new CompanyDto(companyId,null);
-		cmptDto = new ComputerDto.ComputerDtoBuilder().setName(computerName).setIntroduced(introduced).setDiscontinued(discontinued).setCompanyDto(cmpnDto).build();
+
+		cmpnDto = new CompanyDto(companyId, null);
+		cmptDto = new ComputerDto.ComputerDtoBuilder().setName(computerName).setIntroduced(introduced)
+				.setDiscontinued(discontinued).setCompanyDto(cmpnDto).build();
 		computer = MapperComputerDto.computerDtoToComputer(cmptDto).orElse(computer);
+		if (verif.computerValidation(computer)) {
 		computerService.createComputerService(computer);
-		
+		}
+		else {
+			LOGGER.error("il y a une erreur", new InputException("ko"));
+		}
 		doGet(request, response);
 	}
 
