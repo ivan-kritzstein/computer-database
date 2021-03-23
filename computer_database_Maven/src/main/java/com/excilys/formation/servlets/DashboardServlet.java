@@ -23,7 +23,7 @@ import com.excilys.formation.view.Page;
  * Servlet implementation class ComputerServlet
  */
 @WebServlet("/ComputerServlet")
-public class ComputerServlet extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE = "page";
 	private static final String LIST_COMPUTERS = "listComputer";
@@ -35,7 +35,7 @@ public class ComputerServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ComputerServlet() {
+	public DashboardServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

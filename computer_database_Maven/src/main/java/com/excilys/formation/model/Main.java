@@ -18,5 +18,5 @@ public class Main {
 //Logger pour tous les try catch
 // refacto des sysout dans le code 
 // enlever magic string et magic number
-//ajouter classfor name dans la connection
 // bouger la co de place : en phase avec archi mvc
+// enlever le null de AddComputerServlet dans cmpnDto

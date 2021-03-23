@@ -87,9 +87,7 @@ public class ComputerDto {
 		public ComputerDto build() {
 			return new ComputerDto(id, name, introduced, discontinued, companyDto);
 		}
-		
-
-		
+				
 
 	}
 

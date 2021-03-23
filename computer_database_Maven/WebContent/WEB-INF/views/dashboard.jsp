@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +33,7 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer.html">Add
+					<a class="btn btn-success" id="addComputer" href="AddComputerServlet">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -75,116 +75,14 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick=""> ${computerDto.name}</a></td>
+							<td><a href="editComputer.html" onclick="">
+									${computerDto.name}</a></td>
 							<td>${computerDto.introduced}</td>
 							<td>${computerDto.discontinued}</td>
 							<td>${computerDto.companyDto.name}</td>
-
 						</tr>
-
 					</c:forEach>
 
-				<!-- 	<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">Connection
-								Machine</a></td>
-						<td>1987-01-01</td>
-						<td></td>
-						<td>Thinking Machines</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">PowerBook</a></td>
-						<td>1991-01-01</td>
-						<td>2006-01-01</td>
-						<td>Apple Inc.</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">Commodore 64</a></td>
-						<td>1982-08-01</td>
-						<td>1994-01-01</td>
-						<td>Commodore International</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">Altair 8800</a></td>
-						<td>1974-12-19</td>
-						<td></td>
-						<td>Micro Instrumentation and Telemetry Systems</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">Canon Cat</a></td>
-						<td>1987-01-01</td>
-						<td></td>
-						<td>Canon</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">Nokia 770</a></td>
-						<td></td>
-						<td></td>
-						<td>Nokia</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">NeXTcube</a></td>
-						<td>1988-01-01</td>
-						<td>1993-01-01</td>
-						<td>NeXT</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">IBM 650</a></td>
-						<td>1953-01-01</td>
-						<td>1962-01-01</td>
-						<td>IBM</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">PlayStation 2</a>
-						</td>
-						<td>2000-03-24</td>
-						<td></td>
-						<td>Sony</td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">Archos 101</a></td>
-						<td></td>
-						<td></td>
-						<td></td>
-
-					</tr>
-					<tr>
-						<td class="editMode"><input type="checkbox" name="cb"
-							class="cb" value="0"></td>
-						<td><a href="editComputer.html" onclick="">Nintendo 3DS</a></td>
-						<td>2010-03-23</td>
-						<td></td>
-						<td>Nintendo</td>
-
-					</tr> -->
 
 				</tbody>
 			</table>
@@ -197,12 +95,14 @@
 				<li><a href="#" aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
+				<%-- <c:forEach var="page" items="${page}"> --%>
 				<li><a href="#">1</a></li>
 				<li><a href="#">2</a></li>
 				<li><a href="#">3</a></li>
 				<li><a href="#">4</a></li>
 				<li><a href="#">5</a></li>
 				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<%-- </c:forEach> --%>
 				</a></li>
 			</ul>
 
@@ -211,6 +111,7 @@
 				<button type="button" class="btn btn-default">50</button>
 				<button type="button" class="btn btn-default">100</button>
 			</div>
+		</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
