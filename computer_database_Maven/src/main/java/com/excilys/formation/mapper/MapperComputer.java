@@ -29,10 +29,10 @@ public class MapperComputer {
 
 				String name = result.getString("name");
 
-			if (result.getDate("introduced") != null) {
+			if (result.getDate("introduced") != null && result.getString("introduced") != "null") {
 				introduced = result.getDate("introduced").toLocalDate();
 			}
-			if (result.getDate("discontinued") != null) {
+			if (result.getDate("discontinued") != null && result.getString("discontinued") != "null") {
 				discontinued = result.getDate("discontinued").toLocalDate();
 			}
 				company = MapperCompany.dataSqlToCompany(result).orElse(null);

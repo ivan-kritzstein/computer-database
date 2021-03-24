@@ -104,6 +104,6 @@ public class Computer {
 	public String toString() {
 
 		return "id = " + id + " name = " + name + " introduced date = " + introduced + " discontinued date = "
-				+ discontinued + company != null ? company.toString() : null;
+				+ discontinued +  (company != null ? company.toString() : null);
 	}
 }

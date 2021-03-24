@@ -44,8 +44,7 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-// set un string constant ex nmbr ordi
-	// dans le string : id de l'objet sur la jsp
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		List<ComputerDto> listeComputerDto = new ArrayList<ComputerDto>();
@@ -57,7 +56,7 @@ public class DashboardServlet extends HttpServlet {
 		}
 		Page page = (Page) session.getAttribute(PAGE);
 		
-		listeComputerDto = MapperComputerDto.computerToListComputerDto(
+		listeComputerDto = MapperComputerDto.listOptionalComputerToListComputerDto(
 				computerService.printComputerService(computerService.listComputerService(), page));
 
 		List<Optional<Computer>> listC = computerService.printComputerService(computerService.listComputerService(), page);
@@ -69,9 +68,9 @@ public class DashboardServlet extends HttpServlet {
 		System.out.println(listeComputerDto.isEmpty());
 		request.setAttribute(LIST_COMPUTERS, listeComputerDto);
 		
-//		for (ComputerDto c : listeComputerDto) {
-//			System.out.println(c);
-//		}
+		for (ComputerDto c : listeComputerDto) {
+			System.out.println(c);
+		}
 
 		session.setAttribute(PAGE, page);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);

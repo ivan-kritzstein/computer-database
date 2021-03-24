@@ -102,14 +102,15 @@ public class UseMenu {
 			input = sc.nextLine();
 		}
 	}
-	
+
 	public void listComputer() {
 		Page page = new Page();
 		boolean condition = true;
-		
+
 		printComputer(cliFeatures.listComputerController(), page);
 		do {
-		System.out.println(Menu.INSTRUCTION_LIST);;
+			System.out.println(Menu.INSTRUCTION_LIST);
+			;
 			int entry = sc.nextInt();
 			switch (entry) {
 			case Menu.SUIVANT:
@@ -125,13 +126,13 @@ public class UseMenu {
 			}
 		} while (condition);
 	}
-	
+
 	private void printComputer(DAOComputer daoc, Page pages) {
 		for (Optional<Computer> c : cliFeatures.printComputerController(daoc, pages)) {
 			System.out.println(c.orElse(null));
 		}
 	}
-	
+
 	public void showComputerDetails() {
 		String input;
 		input = sc.nextLine();
@@ -147,7 +148,7 @@ public class UseMenu {
 			input = sc.nextLine();
 		}
 	}
-	
+
 	public void createComputer() {
 		String input;
 		Long id = null;
@@ -161,11 +162,18 @@ public class UseMenu {
 				String name = sc.nextLine();
 
 				menuP.createInstructions2();
-				LocalDate introduced = LocalDate.parse(sc.nextLine(), df);
+				LocalDate introduced = null;
+				input = sc.nextLine();
+				if (input != "") {
+					introduced = LocalDate.parse(input, df);
+				}
 
 				menuP.createInstructions3();
-				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
-
+				LocalDate discontinued = null;
+				input = sc.nextLine();
+				if (input != "") {
+					discontinued = LocalDate.parse(input, df);
+				}
 				menuP.createInstructions4();
 				input = sc.nextLine();
 				if (input != "") {
@@ -174,16 +182,17 @@ public class UseMenu {
 
 				Computer computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
 						.setDiscontinued(discontinued).setCompany(company).build();
-				cliFeatures.createComputerController(computer);;
+				cliFeatures.createComputerController(computer);
 			} catch (DateTimeParseException e) {
 				LOGGER.error("la date n'est pas au bon format, réessayez!" + e.getMessage());
+				e.printStackTrace();
 			}
 
 			menuP.retourMenuPrincipal();
 			input = sc.nextLine();
 		}
 	}
-	
+
 	public void updateComputer() {
 
 		String input;
@@ -220,6 +229,7 @@ public class UseMenu {
 			input = sc.nextLine();
 		}
 	}
+
 	public void deleteComputer() {
 		System.out.println("Taper l'id de l'ordinateur à supprimer");
 		String input;

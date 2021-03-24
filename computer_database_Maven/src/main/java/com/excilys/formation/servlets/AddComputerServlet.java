@@ -62,10 +62,6 @@ public class AddComputerServlet extends HttpServlet {
 		List<CompanyDto> listCmpnDto = new ArrayList<CompanyDto>();
 
 		listCmpnDto = MapperCompanyDto.companyToListCompanyDto(companyService.listCompaniesService());
-//
-//		for (CompanyDto c : listCmpnDto) {
-//			System.out.println(c);
-//		}
 
 		request.setAttribute(LIST_COMPANY, listCmpnDto);
 

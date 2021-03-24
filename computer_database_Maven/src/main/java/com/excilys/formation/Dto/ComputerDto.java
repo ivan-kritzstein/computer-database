@@ -55,7 +55,6 @@ public class ComputerDto {
 		private String id;
 		private String name;
 		private CompanyDto companyDto;
-	//	private String companyName;
 		private String introduced;
 		private String discontinued;
 		

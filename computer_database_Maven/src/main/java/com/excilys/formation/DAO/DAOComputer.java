@@ -27,7 +27,7 @@ public class DAOComputer {
 	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?";
 	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id  = ";
 	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name  = ";
-	private static final String REQUEST_LIST = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ? OFFSET ?";
+	private static final String REQUEST_LIST = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ? OFFSET ?";
 	private static final String NBR_COMPUTER = "SELECT COUNT(id) FROM computer";
 	private static final Logger LOGGER = LoggerFactory.getLogger(DAOComputer.class);
 
@@ -41,13 +41,22 @@ public class DAOComputer {
 		try (Connection con = connect.getConnection()) {
 			preparedSelect = con.prepareStatement(REQUEST_CREATE);
 			preparedSelect.setString(1, computer.getName());
-			preparedSelect.setDate(2, java.sql.Date.valueOf(computer.getIntroduced()));
-			preparedSelect.setDate(3, java.sql.Date.valueOf(computer.getDiscontinued()));
+			if (computer.getIntroduced() != null) {
+				preparedSelect.setDate(2, java.sql.Date.valueOf(computer.getIntroduced()));
+			} else {
+				preparedSelect.setDate(2, null);
+			}
+			if (computer.getDiscontinued() != null) {
+				preparedSelect.setDate(3, java.sql.Date.valueOf(computer.getDiscontinued()));
+			} else {
+				preparedSelect.setDate(3, null);
+			}
 			preparedSelect.setObject(4, computer.getCompany().getId());
 			preparedSelect.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			LOGGER.error(e.getMessage());
+			e.printStackTrace();
 		}
 
 	}

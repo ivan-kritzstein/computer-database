@@ -27,23 +27,22 @@
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName" name="computerName"
-									placeholder="Computer name" required>
+									type="text" class="form-control" id="computerName"
+									name="computerName" placeholder="Computer name" required>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced" name="introduced"
-									placeholder="Introduced date">
+									type="date" class="form-control" id="introduced"
+									name="introduced" placeholder="Introduced date" onchange= minDiscontinued(this.value) value ="">
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued" name="discontinued"
-									placeholder="Discontinued date">
+									type="date" class="form-control" id="discontinued"
+									name="discontinued" placeholder="Discontinued date" onchange=maxIntroduced(this.value) value= "">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId" name= "companyId"> 
-									<option value="0">--</option>
+									class="form-control" id="companyId" name="companyId" >
 									<c:forEach var="companyDto" items="${listCompany}">
 										<option value="${companyDto.id}">${companyDto.name}</option>
 									</c:forEach>
@@ -51,8 +50,8 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary">
-							or <a href="AddComputerServlet" class="btn btn-default">Cancel</a>
+							<input type="submit" value="Add" class="btn btn-primary"> or <a
+								href="AddComputerServlet" class="btn btn-default">Cancel</a>
 						</div>
 					</form>
 				</div>
@@ -60,4 +59,6 @@
 		</div>
 	</section>
 </body>
+ <script src="/computer_database/js/addComputer.js"></script>
+
 </html>
