@@ -4,13 +4,9 @@ public class Page {
 	private int offset = 0;
 	private int limit = 10;
 	private int nbrComputer;
-//	private int numeroPage;
-//	private final int CALCUL_NUMERO_PAGE = 1;
-//	int numero1;
-//	int numero2;
-//	int numero3;
-//	int numero4;
-//	int numero5;
+	private String searchComputer = "";
+	private String orderBy = "computer.id";
+
 	
 	public void suivant() {
 		offset += limit;
@@ -53,6 +49,22 @@ public class Page {
 
 	public void setNbrComputer(int nbrComputer) {
 		this.nbrComputer = nbrComputer;
+	}
+
+	public String getSearchComputer() {
+		return searchComputer;
+	}
+
+	public void setSearchComputer(String searchComputer) {
+		this.searchComputer = searchComputer;
+	}
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
 	}
 
 }

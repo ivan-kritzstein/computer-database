@@ -24,11 +24,16 @@ public class DAOComputer {
 	private static final String REQUEST_CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	private static final String REQUEST_DELETE = "delete FROM computer where id=?";
 	private static final String REQUEST_UPDATE_BY_ID = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?";
-	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id  = ";
-	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name  = ";
+	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?";   
+	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ";
+	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ? ";
 	private static final String REQUEST_LIST = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ? OFFSET ?";
 	private static final String NBR_COMPUTER = "SELECT COUNT(id) FROM computer";
+//	private static final String REQUEST_LIST_ORDERBY_SEARCH_SQL = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ? ORDER BY ? LIMIT ? OFFSET ?";
+	private static final String REQUEST_LIST_LIKE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ?";
+	private static final String REQUEST_LIMIT_OFFSET = " LIMIT ? OFFSET ?";
+
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DAOComputer.class);
 
 	public DAOComputer(Connection conn) {
@@ -51,7 +56,11 @@ public class DAOComputer {
 			} else {
 				preparedSelect.setDate(3, null);
 			}
-			preparedSelect.setObject(4, computer.getCompany().getId());
+			if (computer.getCompany().getId() != null && computer.getCompany().getId() != 0) {
+				preparedSelect.setObject(4, computer.getCompany().getId());
+			} else {
+				preparedSelect.setObject(4,null);
+			}
 			preparedSelect.execute();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -148,9 +157,10 @@ public class DAOComputer {
 		List<Optional<Computer>> listeComputer = new ArrayList<Optional<Computer>>();
 
 		try (Connection con = connect.getConnection();
-				PreparedStatement prepareList = con.prepareStatement(REQUEST_LIST)) {
-			prepareList.setInt(1, page.getLimit());
-			prepareList.setInt(2, page.getOffset());
+				PreparedStatement prepareList = con.prepareStatement(REQUEST_LIST_LIKE + " ORDER BY " + page.getOrderBy() + REQUEST_LIMIT_OFFSET)) {
+			prepareList.setString(1, "%" + page.getSearchComputer() + "%");
+			prepareList.setInt(2, page.getLimit());
+			prepareList.setInt(3, page.getOffset());
 			ResultSet result = prepareList.executeQuery();
 			listeComputer = mapComputer.dataSqlToListComputer(result);
 			page.setNbrComputer(sizeListComputer());

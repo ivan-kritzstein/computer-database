@@ -33,8 +33,9 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="AddComputerServlet">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
+					<a class="btn btn-success" id="addComputer"
+						href="AddComputerServlet">Add Computer</a> <a
+						class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
@@ -58,19 +59,19 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th> <a href= "ComputerServlet?order=computer.name"> Computer name </a></th>
+						<th> <a href= "ComputerServlet?order=computer.introduced">Introduced date</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><a href= "ComputerServlet?order=computer.discontinued">Discontinued date</a></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a href= "ComputerServlet?order=company.name">Company</a></th>
 
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
-					<c:forEach var="computerDto" items="${listComputer}">
+					<c:forEach var="computerDto" items="${listComputerLimit10}">
 
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
@@ -79,10 +80,11 @@
 									${computerDto.name}</a></td>
 							<td>${computerDto.introduced}</td>
 							<td>${computerDto.discontinued}</td>
-							<td>${computerDto.companyDto.name}</td>
+							<td>${computerDto.companyName}</td>
 						</tr>
 					</c:forEach>
 
+					
 
 				</tbody>
 			</table>
@@ -102,14 +104,14 @@
 				<li><a href="#">4</a></li>
 				<li><a href="#">5</a></li>
 				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				<%-- </c:forEach> --%>
+						<%-- </c:forEach> --%>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
+				<a href= "ComputerServlet?limit=10" class="btn btn-default" >10</a>
+				<a href= "ComputerServlet?limit=50" class="btn btn-default" >50</a>
+				<a href= "ComputerServlet?limit=100" class="btn btn-default" >100</a>
 			</div>
 		</div>
 	</footer>

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.excilys.formation.Dto.ComputerDto;
+import com.excilys.formation.Dto.ListComputerDto;
 import com.excilys.formation.mapper.MapperComputerDto;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
@@ -26,7 +26,14 @@ import com.excilys.formation.view.Page;
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE = "page";
-	private static final String LIST_COMPUTERS = "listComputer";
+	private static final String LIST_COMPUTERS_LIMIT_10 = "listComputerLimit10";
+	private static final int LIMIT_10 = 10;
+	private static final int LIMIT_50 = 50;
+	private static final int LIMIT_100 = 100;
+	private static final String ORDER_COMPUTER = "computer.name";
+	private static final String ORDER_INTRODUCED = "computer.introduced";
+	private static final String ORDER_DISCONTINUED = "computer.discontinued";
+	private static final String ORDER_COMPANY = "company.name";
 
 	Computer computer;
 	Company company;
@@ -47,31 +54,30 @@ public class DashboardServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		List<ComputerDto> listeComputerDto = new ArrayList<ComputerDto>();
-		
+		List<ListComputerDto> listeComputerDto = new ArrayList<ListComputerDto>();
+//		List<ListComputerDto> listeComputerDto50 = new ArrayList<ListComputerDto>();
+//		List<ListComputerDto> listeComputerDto100 = new ArrayList<ListComputerDto>();
+
 		HttpSession session = request.getSession();
-		if(session.getAttribute(PAGE) == null) {
+		if (session.getAttribute(PAGE) == null) {
 			session.setAttribute(PAGE, new Page());
-			
 		}
 		Page page = (Page) session.getAttribute(PAGE);
-		
+//		if(session.getAttribute(LIST_COMPUTERS_LIMIT_50) == null) {
+//			session.setAttribute(LIST_COMPUTERS_LIMIT_50, listeComputerDto50);
+//		} else if(session.getAttribute(LIST_COMPUTERS_LIMIT_100) == null ) {
+//			session.setAttribute(LIST_COMPUTERS_LIMIT_100, listeComputerDto100);
+//		} else {
+//			session.setAttribute(LIST_COMPUTERS_LIMIT_10, listeComputerDto);
+//		}
+
+		page = buttonLimit(page, request);
+		page = orderBy(page, request);
 		listeComputerDto = MapperComputerDto.listOptionalComputerToListComputerDto(
 				computerService.printComputerService(computerService.listComputerService(), page));
+		request.setAttribute(LIST_COMPUTERS_LIMIT_10, listeComputerDto);
 
-		List<Optional<Computer>> listC = computerService.printComputerService(computerService.listComputerService(), page);
-		
-		for (Optional<Computer> c : listC) {
-			System.out.println(c.orElse(null));
-		}
-
-		System.out.println(listeComputerDto.isEmpty());
-		request.setAttribute(LIST_COMPUTERS, listeComputerDto);
-		
-		for (ComputerDto c : listeComputerDto) {
-			System.out.println(c);
-		}
-
+		System.out.println(page.getLimit());
 		session.setAttribute(PAGE, page);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
@@ -86,4 +92,34 @@ public class DashboardServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	public Page buttonLimit(Page page, HttpServletRequest request) {
+		if (request.getParameter("limit") != null) {
+			if (request.getParameter("limit").toString().equals("10")) {
+				page.setLimit(LIMIT_10);
+			} else if (request.getParameter("limit").toString().equals("50")) {
+				page.setLimit(LIMIT_50);
+			} else if (request.getParameter("limit").toString().equals("100")) {
+				page.setLimit(LIMIT_100);
+			}
+		}
+		return page;
+	}
+
+	public Page orderBy(Page page, HttpServletRequest request) {
+		if (request.getParameter("order") != null) {
+			if (request.getParameter("order").toString().equals(ORDER_COMPUTER)) {
+				page.setOrderBy(ORDER_COMPUTER);
+			}
+			else if (request.getParameter("order").toString().equals(ORDER_INTRODUCED)) {
+				page.setOrderBy(ORDER_INTRODUCED);
+			}
+			else if (request.getParameter("order").toString().equals(ORDER_DISCONTINUED)) {
+				page.setOrderBy(ORDER_DISCONTINUED);
+			}
+			else if (request.getParameter("order").toString().equals(ORDER_COMPANY)) {
+				page.setOrderBy(ORDER_COMPANY);
+			}
+		}
+		return page;
+	}
 }

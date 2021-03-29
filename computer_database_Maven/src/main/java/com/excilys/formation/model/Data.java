@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.mapper.MapperComputer;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class Data {
 
@@ -15,8 +17,22 @@ public class Data {
 	private static final String USER = "admincdb";
 	private static final String PASSWORD = "qwerty1234";
 	private static Data data;
-	private Connection con;
+	private static Connection con;
 	private static Logger LOGGER = LoggerFactory.getLogger(Data.class);
+
+	private static HikariConfig config = new HikariConfig();
+	private static HikariDataSource ds;
+
+	static {
+		config.setJdbcUrl(URL);
+		config.setUsername(USER);
+		config.setPassword(PASSWORD);
+		config.setDriverClassName("com.mysql.jdbc.Driver");
+		config.addDataSourceProperty("cachePrepStmts", "true");
+		config.addDataSourceProperty("prepStmtCacheSize", "250");
+		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+		ds = new HikariDataSource(config);
+	}
 
 	private Data() {
 
@@ -29,18 +45,18 @@ public class Data {
 		return data;
 	}
 
-	public Connection getConnection() { 
+	public Connection getConnection() {
+
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection(URL, USER, PASSWORD);
-		} catch (SQLException | ClassNotFoundException e) {
+			con = ds.getConnection();
+			
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			LOGGER.error(e.getMessage());
+		
 		}
-		// use con here
 		return con;
 	}
-// 1 cstr rivate pour 1 sel objet 
-	// methode getInstance pour acceder a l'objet
-	// attribut de l'objet data
+
+
 }

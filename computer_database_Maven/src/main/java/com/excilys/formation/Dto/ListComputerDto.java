@@ -1,43 +1,50 @@
 package com.excilys.formation.Dto;
 
-public class ComputerDto {
+public class ListComputerDto {
 
 	private String id;
 	private String name;
-	private CompanyDto companyDto;
-	//private String companyName;
+	private String companyName;
+	// private String companyName;
 	private String introduced;
 	private String discontinued;
-	
-	private ComputerDto(String id, String name, String introduced, String discontinued, CompanyDto companyDto) {
+
+	private ListComputerDto(String id, String name, String introduced, String discontinued, String companyName) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.companyDto = companyDto;
+		this.companyName = companyName;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public CompanyDto getCompanyDto() {
-		return companyDto;
+
+	public String getCompanyName() {
+		return companyName;
 	}
-	public void setCompanyDto(CompanyDto companyDto) {
-		this.companyDto = companyDto;
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
+
 	public String getDiscontinued() {
 		return discontinued;
 	}
+
 	public void setDiscontinued(String discontinued) {
 		this.discontinued = discontinued;
 	}
@@ -48,52 +55,51 @@ public class ComputerDto {
 
 	public void setIntroduced(String introduced) {
 		this.introduced = introduced;
-		}
+	}
 
-	public static class ComputerDtoBuilder {
+	public static class ListComputerDtoBuilder {
 
 		private String id;
 		private String name;
-		private CompanyDto companyDto;
+		private String companyName;
 		private String introduced;
 		private String discontinued;
-		
-		public ComputerDtoBuilder setName(String name) {
+
+		public ListComputerDtoBuilder setName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		public ComputerDtoBuilder setCompanyDto(CompanyDto companyDto) {
-			this.companyDto = companyDto;
+		public ListComputerDtoBuilder setCompanyName(String companyName) {
+			this.companyName = companyName;
 			return this;
 		}
 
-		public ComputerDtoBuilder setId(String id) {
+		public ListComputerDtoBuilder setId(String id) {
 			this.id = id;
 			return this;
 		}
 
-		public ComputerDtoBuilder setIntroduced(String introduced) {
+		public ListComputerDtoBuilder setIntroduced(String introduced) {
 			this.introduced = introduced;
 			return this;
 		}
 
-		public ComputerDtoBuilder setDiscontinued(String discontinued) {
+		public ListComputerDtoBuilder setDiscontinued(String discontinued) {
 			this.discontinued = discontinued;
 			return this;
 		}
-		
-		public ComputerDto build() {
-			return new ComputerDto(id, name, introduced, discontinued, companyDto);
+
+		public ListComputerDto build() {
+			return new ListComputerDto(id, name, introduced, discontinued, companyName);
 		}
-				
 
 	}
 
 	@Override
 	public String toString() {
-		return "ComputerDto [id=" + id + ", name=" + name  + ", introduced="
-				+ introduced + ", discontinued=" + discontinued +  companyDto.toString() + "]";
+		return "ListComputerDto [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued="
+				+ discontinued + ", company name= " + companyName + "]";
 	}
-	
+
 }

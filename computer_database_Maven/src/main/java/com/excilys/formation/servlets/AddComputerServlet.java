@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.formation.Dto.AddComputerDto;
 import com.excilys.formation.Dto.CompanyDto;
-import com.excilys.formation.Dto.ComputerDto;
-import com.excilys.formation.controller.ComputerController;
+import com.excilys.formation.Dto.ListComputerDto;
 import com.excilys.formation.exceptions.InputException;
 import com.excilys.formation.mapper.MapperCompanyDto;
 import com.excilys.formation.mapper.MapperComputerDto;
@@ -39,8 +39,8 @@ public class AddComputerServlet extends HttpServlet {
 	ComputerService computerService = new ComputerService();
 	CompanyService companyService = new CompanyService();
 	Computer computer;
-	ComputerDto cmptDto;
-	CompanyDto cmpnDto;
+	AddComputerDto cmptDto;
+	String cmpnDto;
 	ValidationComputer verif = new ValidationComputer();
 	private static Logger LOGGER = LoggerFactory.getLogger(AddComputerServlet.class);
 
@@ -61,8 +61,7 @@ public class AddComputerServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		List<CompanyDto> listCmpnDto = new ArrayList<CompanyDto>();
 
-		listCmpnDto = MapperCompanyDto.companyToListCompanyDto(companyService.listCompaniesService());
-
+		listCmpnDto = MapperCompanyDto.listOptionalCompanyToListCompanyDto(companyService.listCompaniesService());
 		request.setAttribute(LIST_COMPANY, listCmpnDto);
 
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(request, response);
@@ -83,11 +82,17 @@ public class AddComputerServlet extends HttpServlet {
 		String discontinued = request.getParameter(DISCONTINUED);
 		String companyId = request.getParameter(COMPANY_ID);
 
-		cmpnDto = new CompanyDto(companyId, null);
-		cmptDto = new ComputerDto.ComputerDtoBuilder().setName(computerName).setIntroduced(introduced)
-				.setDiscontinued(discontinued).setCompanyDto(cmpnDto).build();
-		computer = MapperComputerDto.computerDtoToComputer(cmptDto).orElse(computer);
+//		cmpnDto = new String(companyId, null);
+	
+		cmptDto = new AddComputerDto.AddComputerDtoBuilder().setName(computerName).setIntroduced(introduced)
+				.setDiscontinued(discontinued).setCompanyId(companyId).build();
+		computer = MapperComputerDto.addComputerDtoToComputer(cmptDto).orElse(computer);
+//		cmptDto = new ListComputerDto.ListComputerDtoBuilder().setName(computerName).setIntroduced(introduced)
+//				.setDiscontinued(discontinued).setCompanyName(cmpnDto).build();
+//		computer = MapperComputerDto.computerDtoToComputer(cmptDto).orElse(computer);
+		System.out.println(computer);
 		if (verif.computerValidation(computer)) {
+			LOGGER.error("coucou");
 		computerService.createComputerService(computer);
 		}
 		else {

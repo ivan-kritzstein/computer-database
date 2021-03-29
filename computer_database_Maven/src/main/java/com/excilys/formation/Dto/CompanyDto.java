@@ -2,36 +2,58 @@ package com.excilys.formation.Dto;
 
 public class CompanyDto {
 
+	private String name;
+	private String id;
+
+	private CompanyDto(String id, String name) {
+		
+		this.name = name;
+		this.id = id;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+	public static class CompanyDtoBuilder {
+
 		private String name;
 		private String id;
-		
-		public CompanyDto() {
-			
-		}
-		
-		public CompanyDto(String id, String name) {
-			this.setId(id);
-			this.setName(name);
-		}
 
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
+		public CompanyDtoBuilder setName(String name) {
 			this.name = name;
+			return this;
 		}
 
-		public String getId() {
-			return id;
-		}
-
-		public void setId(String id) {
+		
+		public CompanyDtoBuilder setId(String id) {
 			this.id = id;
+			return this;
 		}
 
-		@Override
-		public String toString() {
-			return "CompanyDto [name=" + name + ", id=" + id + "]";
+		public CompanyDto build() {
+			return new CompanyDto(id, name);
 		}
+
+	}
+
+	@Override
+	public String toString() {
+		return "ListComputerDto [" + "company name= " + name + ", company id=" + id + "]";
+	}
 }
+
