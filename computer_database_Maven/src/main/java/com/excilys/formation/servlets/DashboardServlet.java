@@ -17,6 +17,7 @@ import com.excilys.formation.mapper.MapperComputerDto;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.service.ComputerService;
+import com.excilys.formation.validation.ValidationComputer;
 import com.excilys.formation.view.Page;
 
 /**
@@ -34,11 +35,12 @@ public class DashboardServlet extends HttpServlet {
 	private static final String ORDER_INTRODUCED = "computer.introduced";
 	private static final String ORDER_DISCONTINUED = "computer.discontinued";
 	private static final String ORDER_COMPANY = "company.name";
+	private static final String DELETE_COMPUTER = "deleteComputer";
 
 	Computer computer;
 	Company company;
 	ComputerService computerService = new ComputerService();
-
+	ValidationComputer verif = new ValidationComputer();
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -73,11 +75,11 @@ public class DashboardServlet extends HttpServlet {
 
 		page = buttonLimit(page, request);
 		page = orderBy(page, request);
+		page = searchName(page, request);
 		listeComputerDto = MapperComputerDto.listOptionalComputerToListComputerDto(
 				computerService.printComputerService(computerService.listComputerService(), page));
 		request.setAttribute(LIST_COMPUTERS_LIMIT_10, listeComputerDto);
 
-		System.out.println(page.getLimit());
 		session.setAttribute(PAGE, page);
 		this.getServletContext().getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
 	}
@@ -88,6 +90,38 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		String selection2 =  request.getParameter("selection");
+		String[] selectionTab = selection2.split(","); 
+		
+		for (String s : selectionTab) {
+			if (verif.deleteValidation(s)) {
+			Long id = Long.valueOf(s);
+			computerService.deleteComputerService(id);
+			}
+		}
+//		System.out.println(selection2);
+//		System.out.println("le string selec2 est au dessus");
+
+		
+//		for (String s : selectionTab) {
+//			
+//			System.out.println("1");
+//			System.out.println(s);
+//			System.out.println("2");
+//		}
+		
+//		if (selectionList != null) {
+//			for (String s : selectionList) {
+//				System.out.println("coucou");
+//				System.out.println(s);
+//				System.out.println("coucou2");
+//			}
+//		}
+//		for (String s : selectionList) {
+//			computerService.deleteComputerService(Long.valueOf(s));
+//		}
+
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
@@ -109,17 +143,23 @@ public class DashboardServlet extends HttpServlet {
 		if (request.getParameter("order") != null) {
 			if (request.getParameter("order").toString().equals(ORDER_COMPUTER)) {
 				page.setOrderBy(ORDER_COMPUTER);
-			}
-			else if (request.getParameter("order").toString().equals(ORDER_INTRODUCED)) {
+			} else if (request.getParameter("order").toString().equals(ORDER_INTRODUCED)) {
 				page.setOrderBy(ORDER_INTRODUCED);
-			}
-			else if (request.getParameter("order").toString().equals(ORDER_DISCONTINUED)) {
+			} else if (request.getParameter("order").toString().equals(ORDER_DISCONTINUED)) {
 				page.setOrderBy(ORDER_DISCONTINUED);
-			}
-			else if (request.getParameter("order").toString().equals(ORDER_COMPANY)) {
+			} else if (request.getParameter("order").toString().equals(ORDER_COMPANY)) {
 				page.setOrderBy(ORDER_COMPANY);
 			}
 		}
 		return page;
 	}
+	
+	public Page searchName(Page page, HttpServletRequest request) {
+		if (request.getParameter("search") != null) {
+			String s = request.getParameter("search");
+			page.setSearchComputer(s);
+		}
+		return page;
+	}
+
 }

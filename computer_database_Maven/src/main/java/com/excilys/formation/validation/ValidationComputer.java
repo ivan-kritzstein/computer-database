@@ -24,4 +24,14 @@ public class ValidationComputer {
 		return verif;
 
 	}
+	
+	public boolean deleteValidation(String s) {
+		boolean verif = true;
+		
+		if(s == null || s == "") {
+			verif = false;
+		}
+		
+		return verif;
+	}
 }

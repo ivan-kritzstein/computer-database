@@ -122,7 +122,7 @@ public class MapperComputerDto {
 		if (cmptDto.getDiscontinued() != null && cmptDto.getDiscontinued().compareTo("") != 0) {
 			discontinued = LocalDate.parse(cmptDto.getDiscontinued(), df);
 		}
-		if (cmptDto.getCompanyId() != null ) {
+		if (cmptDto.getCompanyId() != null) {
 			company.setId(Long.parseLong(cmptDto.getCompanyId()));
 		} 
 

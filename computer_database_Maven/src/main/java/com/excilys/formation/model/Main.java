@@ -19,3 +19,6 @@ public class Main {
 // enlever magic string et magic number
 // bouger la co de place : en phase avec archi mvc
 // enlever le null de AddComputerServlet dans cmpnDto
+// faire fichier avec versions des dependences
+//request.getparameter(selection) puis appliquer le split
+// changer optional or else null

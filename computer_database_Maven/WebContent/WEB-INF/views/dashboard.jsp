@@ -14,7 +14,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href=ComputerServlet> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -29,7 +29,7 @@
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
 							type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" />
+							class="btn btn-primary" href=ComputerServlet?search="search"/>
 					</form>
 				</div>
 				<div class="pull-right">
@@ -41,9 +41,13 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
-			<input type="hidden" name="selection" value="">
-		</form>
+
+
+
+			<form id="deleteForm" action="ComputerServlet" method="POST">
+				<input type="hidden" name="selection" value="" id="selection">
+			</form>
+
 
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered">
@@ -59,12 +63,15 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th> <a href= "ComputerServlet?order=computer.name"> Computer name </a></th>
-						<th> <a href= "ComputerServlet?order=computer.introduced">Introduced date</a></th>
+						<th><a href="ComputerServlet?order=computer.name">
+								Computer name </a></th>
+						<th><a href="ComputerServlet?order=computer.introduced">Introduced
+								date</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a href= "ComputerServlet?order=computer.discontinued">Discontinued date</a></th>
+						<th><a href="ComputerServlet?order=computer.discontinued">Discontinued
+								date</a></th>
 						<!-- Table header for Company -->
-						<th><a href= "ComputerServlet?order=company.name">Company</a></th>
+						<th><a href="ComputerServlet?order=company.name">Company</a></th>
 
 					</tr>
 				</thead>
@@ -75,8 +82,8 @@
 
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick="">
+								class="cb" value="${computerDto.id}"></td>
+							<td><a href="EditServlet?computerId=${computerDto.id}" onclick="">
 									${computerDto.name}</a></td>
 							<td>${computerDto.introduced}</td>
 							<td>${computerDto.discontinued}</td>
@@ -84,7 +91,7 @@
 						</tr>
 					</c:forEach>
 
-					
+
 
 				</tbody>
 			</table>
@@ -109,9 +116,9 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href= "ComputerServlet?limit=10" class="btn btn-default" >10</a>
-				<a href= "ComputerServlet?limit=50" class="btn btn-default" >50</a>
-				<a href= "ComputerServlet?limit=100" class="btn btn-default" >100</a>
+				<a href="ComputerServlet?limit=10" class="btn btn-default">10</a> <a
+					href="ComputerServlet?limit=50" class="btn btn-default">50</a> <a
+					href="ComputerServlet?limit=100" class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>
