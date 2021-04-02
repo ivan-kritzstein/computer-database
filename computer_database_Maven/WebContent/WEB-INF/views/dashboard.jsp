@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+<link href="../../computer_database/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="../../computer_database/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="../../computer_database/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -105,11 +105,11 @@
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 				<%-- <c:forEach var="page" items="${page}"> --%>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
+				<li><a href="ComputerServlet?offset=${index1}" >${index1}</a></li>
+				<li><a href="ComputerServlet?offset=${index2}">${index2}</a></li>
+				<li><a href="ComputerServlet?offset=${index3}">${index3}</a></li>
+				<li><a href="ComputerServlet?offset=${index4}">${index4}</a></li>
+				<li><a href="ComputerServlet?offset=${index5}">${index5}</a></li>
 				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 						<%-- </c:forEach> --%>
 				</a></li>
@@ -122,9 +122,9 @@
 			</div>
 		</div>
 	</footer>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/dashboard.js"></script>
+	<script src="../../computer_database/js/jquery.min.js"></script>
+	<script src="../../computer_database/js/bootstrap.min.js"></script>
+	<script src="../../computer_database/js/dashboard.js"></script>
 
 </body>
 </html>

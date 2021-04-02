@@ -13,11 +13,11 @@ public class ComputerController {
 
 
 	public DAOComputer listComputerController() {
-		return computerService.listComputerService();
+		return null;
 	}
 
-	public List<Optional<Computer>> printComputerController(DAOComputer daoc, Page page) {
-		return computerService.printComputerService(daoc, page);
+	public List<Optional<Computer>> printComputerController( Page page) {
+		return computerService.printComputerService( page);
 	}
 
 	public Optional<Computer> showComputerDetailsIdController(Long idDetails) {

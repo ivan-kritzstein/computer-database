@@ -8,10 +8,10 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-import com.excilys.formation.DAO.DAOCompany;
 import com.excilys.formation.model.Company;
-
+@Component
 public class MapperCompany {
 	private static Logger LOGGER = LoggerFactory.getLogger(MapperCompany.class);
 

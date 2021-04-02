@@ -9,10 +9,11 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
-
+@Component
 public class MapperComputer {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(MapperComputer.class);

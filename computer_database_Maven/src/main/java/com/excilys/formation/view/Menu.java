@@ -11,6 +11,7 @@ public class Menu {
 	public static final String CHOICE_5 = "Taper 5 : Créer un nouvel ordinateur";
 	public static final String CHOICE_6 = "Taper 6 : Modifier un ordinateur";
 	public static final String CHOICE_7 = "Taper 7 : Supprimer un ordinateur";
+	public static final String CHOICE_8 = "Taper 8 : Supprimer une companie et ses ordinateurs associés";
 	public static final String INSTRUCTION_LIST = "Tapez 1 pour les 10 suivants et tapez 2 pour les 10 précédents";
 	public static final int SUIVANT = 1;
 	public static final int PRECEDENT = 2;
@@ -30,6 +31,8 @@ public class Menu {
 		System.out.println(CHOICE_6);
 		System.out.println(SEPARATE);
 		System.out.println(CHOICE_7);
+		System.out.println(SEPARATE);
+		System.out.println(CHOICE_8);
 	}
 // transformer methode en constante et les appeler dans useMenu
 	public void retourMenuPrincipal() {

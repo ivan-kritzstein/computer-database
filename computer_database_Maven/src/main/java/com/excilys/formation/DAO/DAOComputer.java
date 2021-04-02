@@ -11,15 +11,18 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.formation.mapper.MapperComputer;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.model.Data;
 import com.excilys.formation.view.Page;
 
+@Component
 public class DAOComputer {
 
-	protected Data connect = Data.getInstance();
+	protected Data connect;
 	MapperComputer mapComputer;
 	private static final String REQUEST_CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	private static final String REQUEST_DELETE = "delete FROM computer where id=?";
@@ -27,16 +30,16 @@ public class DAOComputer {
 	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?";
 	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ";
 	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ? ";
-//	private static final String REQUEST_LIST = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id LIMIT ? OFFSET ?";
 	private static final String NBR_COMPUTER = "SELECT COUNT(id) FROM computer WHERE computer.name LIKE ?";
-//	private static final String REQUEST_LIST_ORDERBY_SEARCH_SQL = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ? ORDER BY ? LIMIT ? OFFSET ?";
 	private static final String REQUEST_LIST_LIKE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ?";
 	private static final String REQUEST_LIMIT_OFFSET = " LIMIT ? OFFSET ?";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DAOComputer.class);
 
-	public DAOComputer(Connection conn) {
-		mapComputer = new MapperComputer();
+	@Autowired
+	public DAOComputer(Data connect, MapperComputer mapperComputer) {
+		this.connect = connect;
+		mapComputer = mapperComputer;
 	}
 
 	public void create(Computer computer) {

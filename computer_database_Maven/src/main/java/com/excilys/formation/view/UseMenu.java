@@ -21,7 +21,7 @@ public class UseMenu {
 	Menu menuP = new Menu();
 	Scanner sc = new Scanner(System.in);
 	Connection con;
-	ComputerController cliFeatures = new ComputerController();
+	ComputerController computerController = new ComputerController();
 	CompanyController companyController = new CompanyController();
 	private static Logger LOGGER = LoggerFactory.getLogger(ComputerController.class);
 
@@ -73,6 +73,10 @@ public class UseMenu {
 				deleteComputer();
 				menuP.menuPrincipal();
 				break;
+			case 8:
+				System.out.println(Menu.SEPARATE);
+				deleteCompanyAndComputersAssociated();
+				menuP.menuPrincipal();
 			default:
 				break;
 			}
@@ -81,6 +85,7 @@ public class UseMenu {
 	}
 
 	public void listCompanies() {
+		System.out.println(companyController);
 		for (Optional<Company> c : companyController.listCompaniesController()) {
 			System.out.println(c.orElse(null));
 		}
@@ -107,7 +112,7 @@ public class UseMenu {
 		Page page = new Page();
 		boolean condition = true;
 
-		printComputer(cliFeatures.listComputerController(), page);
+		printComputer(computerController.listComputerController(), page);
 		do {
 			System.out.println(Menu.INSTRUCTION_LIST);
 			;
@@ -115,11 +120,11 @@ public class UseMenu {
 			switch (entry) {
 			case Menu.SUIVANT:
 				page.suivant();
-				printComputer(cliFeatures.listComputerController(), page);
+				printComputer(computerController.listComputerController(), page);
 				break;
 			case Menu.PRECEDENT:
 				page.precedent();
-				printComputer(cliFeatures.listComputerController(), page);
+				printComputer(computerController.listComputerController(), page);
 				break;
 			default:
 				condition = !!!true;
@@ -128,7 +133,7 @@ public class UseMenu {
 	}
 
 	private void printComputer(DAOComputer daoc, Page pages) {
-		for (Optional<Computer> c : cliFeatures.printComputerController(daoc, pages)) {
+		for (Optional<Computer> c : computerController.printComputerController( pages)) {
 			System.out.println(c.orElse(null));
 		}
 	}
@@ -139,10 +144,10 @@ public class UseMenu {
 		while (!input.startsWith("0")) {
 			try {
 				Long idDetails = Long.parseLong(input);
-				System.out.println(cliFeatures.showComputerDetailsIdController(idDetails).orElse(null));
+				System.out.println(computerController.showComputerDetailsIdController(idDetails).orElse(null));
 			} catch (NumberFormatException e) {
 				String nameDetails = input;
-				System.out.println(cliFeatures.showComputerDetailsNameController(nameDetails).orElse(null));
+				System.out.println(computerController.showComputerDetailsNameController(nameDetails).orElse(null));
 			}
 			menuP.retourMenuPrincipal();
 			input = sc.nextLine();
@@ -182,7 +187,7 @@ public class UseMenu {
 
 				Computer computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
 						.setDiscontinued(discontinued).setCompany(company).build();
-				cliFeatures.createComputerController(computer);
+				computerController.createComputerController(computer);
 			} catch (DateTimeParseException e) {
 				LOGGER.error("la date n'est pas au bon format, réessayez!" + e.getMessage());
 				e.printStackTrace();
@@ -221,7 +226,7 @@ public class UseMenu {
 
 				Computer computer = new Computer.ComputerBuilder().setId(idAModifier).setName(name)
 						.setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build();
-				cliFeatures.updateComputerController(idAModifier, computer);
+				computerController.updateComputerController(idAModifier, computer);
 			} catch (DateTimeParseException e) {
 				LOGGER.error("la date n'est pas au bon format, réessayez!" + e.getMessage());
 			}
@@ -237,7 +242,21 @@ public class UseMenu {
 		while (!input.startsWith("0")) {
 
 			Long idDelete = Long.parseLong(input);
-			cliFeatures.deleteComputerController(idDelete);
+			computerController.deleteComputerController(idDelete);
+
+			menuP.retourMenuPrincipal();
+			input = sc.nextLine();
+		}
+	}
+	
+	public void deleteCompanyAndComputersAssociated() {
+		System.out.println("Taper l'id de la companie à supprimer, tous les ordinateurs associés seront supprimés également");
+		String input;
+		input = sc.nextLine();
+		while (!input.startsWith("0")) {
+
+			Long idDelete = Long.parseLong(input);
+			companyController.deleteCompanyAndComputersAssociatedController(idDelete);
 
 			menuP.retourMenuPrincipal();
 			input = sc.nextLine();

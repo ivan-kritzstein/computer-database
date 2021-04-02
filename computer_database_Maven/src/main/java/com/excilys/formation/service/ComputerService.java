@@ -1,45 +1,39 @@
 package com.excilys.formation.service;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.formation.DAO.DAOComputer;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.view.Page;
-
+@Component
 public class ComputerService {
-	Connection con;
+	@Autowired 
+	DAOComputer daocomputer;
+
 
 	
-	public DAOComputer listComputerService() {
-		DAOComputer daoc = new DAOComputer(con);
-		return daoc;
-	}
-	
-	public List<Optional<Computer>> printComputerService(DAOComputer daoc, Page page) {
-		return daoc.list(page);
+	public List<Optional<Computer>> printComputerService(Page page) {
+		return daocomputer.list(page);
 	}
 	
 	public Optional<Computer> showComputerDetailsIdService(Long idDetails) {
-		DAOComputer daoc = new DAOComputer(con);
-		return daoc.showDetailsWithId(idDetails);
+		return daocomputer.showDetailsWithId(idDetails);
 	}
 	
 	public Optional<Computer> showComputerDetailsNameService(String nameDetails) {
-		DAOComputer daoc = new DAOComputer(con);
-		return daoc.showDetailsWithName(nameDetails);
+		return daocomputer.showDetailsWithName(nameDetails);
 	}
 	public void createComputerService(Computer computer) {
-		DAOComputer daoc = new DAOComputer(con);
-		daoc.create(computer);
+		daocomputer.create(computer);
 	}
 	public void updateComputerService(Long idAModifier, Computer computer) {
-		DAOComputer daoc = new DAOComputer(con);
-		daoc.updateById(idAModifier, computer);
+		daocomputer.updateById(idAModifier, computer);
 	}
 	public void deleteComputerService(Long id) {
-		DAOComputer daoc = new DAOComputer(con);
-		daoc.delete(id);
+		daocomputer.delete(id);
 	}
 }

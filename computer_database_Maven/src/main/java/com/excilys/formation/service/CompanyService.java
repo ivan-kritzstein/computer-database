@@ -1,27 +1,34 @@
 package com.excilys.formation.service;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.formation.DAO.DAOCompany;
 import com.excilys.formation.model.Company;
-
+@Component
 public class CompanyService {
-	Connection con;
-
+	@Autowired
+	DAOCompany daocompany;
+	
 	public List<Optional<Company>> listCompaniesService() {
-		DAOCompany daocp = new DAOCompany(con);
-		return daocp.list();
+
+		return daocompany.list();
 	}
 	
 	public Optional<Company> showCompanyDetailsIdService(Long idDetails) {
-		DAOCompany daocp = new DAOCompany(con);
-		return daocp.showDetailsWithId(idDetails);
+
+		return daocompany.showDetailsWithId(idDetails);
 	}
 	
 	public Optional<Company> showCompanyDetailsNameSerive(String nameDetails) {
-		DAOCompany daocp = new DAOCompany(con);
-		return daocp.showDetailsWithName(nameDetails);
+
+		return daocompany.showDetailsWithName(nameDetails);
+	}
+	
+	public void deleteCompanyAndComputersAssociatedService(Long idDelate) {
+		daocompany.delete(idDelate);
 	}
 }

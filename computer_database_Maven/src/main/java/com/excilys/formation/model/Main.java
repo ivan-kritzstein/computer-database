@@ -1,5 +1,8 @@
 package com.excilys.formation.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.excilys.formation.view.UseMenu;
 
 public class Main {
