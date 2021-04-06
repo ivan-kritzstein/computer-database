@@ -9,6 +9,8 @@ import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.formation.DAO.DAOComputer;
 import com.excilys.formation.controller.CompanyController;
@@ -16,17 +18,27 @@ import com.excilys.formation.controller.ComputerController;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
 
+@Component
 public class UseMenu {
+	ComputerController computerController;
+	CompanyController companyController;
+	Menu menu;
+	
+	@Autowired
+	public UseMenu (ComputerController computerController, CompanyController companyController, Menu menu) {
+		this.computerController = computerController;
+		this.companyController = companyController;
+		this.menu = menu;
+	}
 
-	Menu menuP = new Menu();
+	
 	Scanner sc = new Scanner(System.in);
 	Connection con;
-	ComputerController computerController = new ComputerController();
-	CompanyController companyController = new CompanyController();
+	
 	private static Logger LOGGER = LoggerFactory.getLogger(ComputerController.class);
 
 	public void useMenuP() {
-		menuP.menuPrincipal();
+		menu.menuPrincipal();
 		int userEntry = 0;
 		while (userEntry != 100) {
 
@@ -34,49 +46,49 @@ public class UseMenu {
 
 			switch (userEntry) {
 			case 0:
-				menuP.menuPrincipal();
+				menu.menuPrincipal();
 				break;
 
 			case 1:
 				listCompanies();
-				menuP.retourMenuPrincipal();
+				menu.retourMenuPrincipal();
 				break;
 
 			case 2:
-				menuP.menuShowCompanyDetails();
+				menu.menuShowCompanyDetails();
 				showCompanyDetails();
-				menuP.menuPrincipal();
+				menu.menuPrincipal();
 
 				break;
 			case 3:
 				listComputer();
-				menuP.retourMenuPrincipal();
+				menu.retourMenuPrincipal();
 				break;
 			case 4:
-				menuP.menuShowComputerDetails();
+				menu.menuShowComputerDetails();
 				showComputerDetails();
-				menuP.menuPrincipal();
+				menu.menuPrincipal();
 
 				break;
 			case 5:
-				menuP.menuCreateComputer();
+				menu.menuCreateComputer();
 				createComputer();
-				menuP.menuPrincipal();
+				menu.menuPrincipal();
 				break;
 			case 6:
 				System.out.println(Menu.SEPARATE);
 				updateComputer();
-				menuP.menuPrincipal();
+				menu.menuPrincipal();
 				break;
 			case 7:
 				System.out.println(Menu.SEPARATE);
 				deleteComputer();
-				menuP.menuPrincipal();
+				menu.menuPrincipal();
 				break;
 			case 8:
 				System.out.println(Menu.SEPARATE);
 				deleteCompanyAndComputersAssociated();
-				menuP.menuPrincipal();
+				menu.menuPrincipal();
 			default:
 				break;
 			}
@@ -103,7 +115,7 @@ public class UseMenu {
 				System.out.println(companyController.showCompanyDetailsNameController(nameDetails).orElse(null));
 			}
 
-			menuP.retourMenuPrincipal();
+			menu.retourMenuPrincipal();
 			input = sc.nextLine();
 		}
 	}
@@ -149,7 +161,7 @@ public class UseMenu {
 				String nameDetails = input;
 				System.out.println(computerController.showComputerDetailsNameController(nameDetails).orElse(null));
 			}
-			menuP.retourMenuPrincipal();
+			menu.retourMenuPrincipal();
 			input = sc.nextLine();
 		}
 	}
@@ -163,23 +175,23 @@ public class UseMenu {
 		input = sc.nextLine();
 		while (!input.startsWith("0")) {
 			try {
-				menuP.createInstructions1();
+				menu.createInstructions1();
 				String name = sc.nextLine();
 
-				menuP.createInstructions2();
+				menu.createInstructions2();
 				LocalDate introduced = null;
 				input = sc.nextLine();
 				if (input != "") {
 					introduced = LocalDate.parse(input, df);
 				}
 
-				menuP.createInstructions3();
+				menu.createInstructions3();
 				LocalDate discontinued = null;
 				input = sc.nextLine();
 				if (input != "") {
 					discontinued = LocalDate.parse(input, df);
 				}
-				menuP.createInstructions4();
+				menu.createInstructions4();
 				input = sc.nextLine();
 				if (input != "") {
 					company.setId(Long.parseLong(input));
@@ -193,7 +205,7 @@ public class UseMenu {
 				e.printStackTrace();
 			}
 
-			menuP.retourMenuPrincipal();
+			menu.retourMenuPrincipal();
 			input = sc.nextLine();
 		}
 	}
@@ -209,16 +221,16 @@ public class UseMenu {
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy MM dd");
 		while (!sc.nextLine().startsWith("0")) {
 			try {
-				menuP.createInstructions1();
+				menu.createInstructions1();
 				String name = sc.nextLine();
 
-				menuP.createInstructions2();
+				menu.createInstructions2();
 				LocalDate introduced = LocalDate.parse(sc.nextLine(), df);
 
-				menuP.createInstructions3();
+				menu.createInstructions3();
 				LocalDate discontinued = LocalDate.parse(sc.nextLine(), df);
 
-				menuP.createInstructions4();
+				menu.createInstructions4();
 				input = sc.nextLine();
 				if (input != "") {
 					company.setId(Long.parseLong(input));
@@ -230,7 +242,7 @@ public class UseMenu {
 			} catch (DateTimeParseException e) {
 				LOGGER.error("la date n'est pas au bon format, réessayez!" + e.getMessage());
 			}
-			menuP.retourMenuPrincipal();
+			menu.retourMenuPrincipal();
 			input = sc.nextLine();
 		}
 	}
@@ -244,7 +256,7 @@ public class UseMenu {
 			Long idDelete = Long.parseLong(input);
 			computerController.deleteComputerController(idDelete);
 
-			menuP.retourMenuPrincipal();
+			menu.retourMenuPrincipal();
 			input = sc.nextLine();
 		}
 	}
@@ -258,7 +270,7 @@ public class UseMenu {
 			Long idDelete = Long.parseLong(input);
 			companyController.deleteCompanyAndComputersAssociatedController(idDelete);
 
-			menuP.retourMenuPrincipal();
+			menu.retourMenuPrincipal();
 			input = sc.nextLine();
 		}
 	}

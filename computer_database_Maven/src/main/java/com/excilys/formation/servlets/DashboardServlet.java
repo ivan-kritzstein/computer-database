@@ -13,13 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.Dto.ListComputerDto;
 import com.excilys.formation.mapper.MapperComputerDto;
-import com.excilys.formation.model.Company;
-import com.excilys.formation.model.Computer;
 import com.excilys.formation.service.ComputerService;
 import com.excilys.formation.validation.ValidationComputer;
 import com.excilys.formation.view.Page;
@@ -29,7 +26,7 @@ import com.excilys.formation.view.Page;
  */
 @WebServlet("/ComputerServlet")
 //@RequestMapping("/ComputerServlet")
-@Component
+//@Controller
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE = "page";
@@ -48,17 +45,30 @@ public class DashboardServlet extends HttpServlet {
 	private static final String INDEX_4 = "index4";
 	private static final String INDEX_5 = "index5";
 
-	Computer computer;
-	Company company;
 	@Autowired
 	ComputerService computerService;
-	ValidationComputer verif = new ValidationComputer();
+	@Autowired
+	ValidationComputer validationComputer;
 
+
+//	public DashboardServlet (ComputerService computerService, ValidationComputer validationComputer) {
+//		this.computerService = computerService;
+//		this.validationComputer = validationComputer;
+//	}
+	
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 
+	 @Override
+	    public void init(ServletConfig config) throws ServletException {
+	        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+	        super.init(config);
+	    }
+	
+	
 //	@GetMapping
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -92,7 +102,7 @@ public class DashboardServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (verif.deleteValidation(request.getParameter("selection"))) {
+		if (validationComputer.deleteValidation(request.getParameter("selection"))) {
 			String selection2 = request.getParameter("selection");
 			String[] selectionTab = selection2.split(",");
 
@@ -106,11 +116,7 @@ public class DashboardServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	 @Override
-	    public void init(ServletConfig config) throws ServletException {
-	        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-	        super.init(config);
-	    }
+	
 
 	public Page buttonLimit(Page page, HttpServletRequest request) {
 		if (request.getParameter("limit") != null) {

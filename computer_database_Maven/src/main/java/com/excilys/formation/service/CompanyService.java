@@ -4,17 +4,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.excilys.formation.DAO.DAOCompany;
 import com.excilys.formation.model.Company;
-@Component
+@Service
 public class CompanyService {
-	@Autowired
+	
 	DAOCompany daocompany;
 	
+	@Autowired
+	public CompanyService(DAOCompany daocompany) {
+		this.daocompany = daocompany;
+		System.out.println("coucou Ulysse");
+	}
+	
 	public List<Optional<Company>> listCompaniesService() {
-
 		return daocompany.list();
 	}
 	

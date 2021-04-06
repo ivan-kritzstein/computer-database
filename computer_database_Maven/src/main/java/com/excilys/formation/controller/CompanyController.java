@@ -4,14 +4,18 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.formation.model.Company;
 import com.excilys.formation.service.CompanyService;
-@Component
+@Controller
 public class CompanyController {
-	@Autowired
 	CompanyService companyService; 
+	
+	@Autowired
+	public CompanyController (CompanyService companyService){
+		this.companyService = companyService;
+	}
 
 	public List<Optional<Company>> listCompaniesController() {
 		System.out.println(companyService);

@@ -1,7 +1,10 @@
 package com.excilys.formation.validation;
 
+import org.springframework.stereotype.Component;
+
 import com.excilys.formation.model.Computer;
 
+@Component
 public class ValidationComputer {
 
 	public boolean computerValidation(Computer computer) {

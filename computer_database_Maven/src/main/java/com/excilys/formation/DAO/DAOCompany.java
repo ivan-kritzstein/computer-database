@@ -9,19 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.mapper.MapperCompany;
 import com.excilys.formation.model.Company;
-import com.excilys.formation.model.Data;
 
 @Repository
 public class DAOCompany {
 
-	protected Data connect;
-	MapperCompany mapCompany = new MapperCompany();
+	protected DataSource connect;
+	MapperCompany mapCompany;
 	private static final String REQUEST_CREATE = "INSERT INTO company (name) VALUES (?)";
 	private static final String REQUEST_DELETE = "delete from company WHERE id = ?";
 	private static final String REQUEST_UPDTATE_ID = "UPDATE company SET id = ?, name = ? WHERE id = ?";
@@ -30,9 +32,11 @@ public class DAOCompany {
 	private static final String REQUEST_DELETE_COMPUTER_OF_COMPANY = "delete FROM computer WHERE computer.company_id = ?";
 	private static Logger LOGGER = LoggerFactory.getLogger(DAOCompany.class);
 
-	public DAOCompany(Data connect) {
-		
+	@Autowired
+	public DAOCompany(DataSource connect, MapperCompany mapperCompany) {
+
 		this.connect = connect;
+		this.mapCompany = mapperCompany;
 	}
 
 	public void create(Company company) {
@@ -51,41 +55,48 @@ public class DAOCompany {
 
 	public void delete(Long id) {
 
-		Connection con = connect.getConnection();
-		PreparedStatement preparedDelete;
-		try {
-			con.setAutoCommit(false);
-			deleteComputerOfCompany(id);
-			preparedDelete = con.prepareStatement(REQUEST_DELETE);
-			preparedDelete.setLong(1, id);
-			preparedDelete.execute();
-			con.commit();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		try (Connection con = connect.getConnection()) {
+
+			PreparedStatement preparedDelete;
 			try {
-				con.rollback();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			};
-			LOGGER.error(e.getMessage());
-		} finally {
-			try {
-				con.close();
+				con.setAutoCommit(false);
+				deleteComputerOfCompany(id);
+				preparedDelete = con.prepareStatement(REQUEST_DELETE);
+				preparedDelete.setLong(1, id);
+				preparedDelete.execute();
+				con.commit();
 			} catch (SQLException e) {
+				LOGGER.error(e.getMessage() + e.getStackTrace());
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				try {
+					con.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					LOGGER.error(e1.getMessage() + e1.getStackTrace());
+				}
+				;
+				LOGGER.error(e.getMessage());
+			} finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					LOGGER.error(e.getMessage() + e.getStackTrace());
+				}
 			}
+		} catch (SQLException e2) {
+			// TODO Auto-generated catch block
+			LOGGER.error(e2.getMessage() + e2.getStackTrace());
 		}
 	}
-	
+
 	public void deleteComputerOfCompany(Long id) {
 
 		PreparedStatement preparedDelete;
 		try (Connection con = connect.getConnection()) {
 			preparedDelete = con.prepareStatement(REQUEST_DELETE_COMPUTER_OF_COMPANY);
 			if (id != null && id != 0) {
-			preparedDelete.setLong(1, id);
+				preparedDelete.setLong(1, id);
 			}
 			preparedDelete.execute();
 

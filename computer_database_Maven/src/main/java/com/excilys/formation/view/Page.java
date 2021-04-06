@@ -3,14 +3,14 @@ package com.excilys.formation.view;
 import javax.servlet.http.HttpServletRequest;
 
 public class Page {
+	private static final int ZERO = 0;
+	private static final int UN = 1;
+	private static final int DEUX = 2;
 	private int offset = 0;
 	private int limit = 10;
 	private int nbrComputer;
 	private String searchComputer = "";
 	private String orderBy = "computer.id";
-	private static final int ZERO = 0;
-	private static final int UN = 1;
-	private static final int DEUX = 2;
 	private int index1 = 1;
 	private int index2 = 2;
 	private int index3 = 3;

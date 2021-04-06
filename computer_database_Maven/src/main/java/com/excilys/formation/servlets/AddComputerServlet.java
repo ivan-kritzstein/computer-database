@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.Dto.AddComputerDto;
 import com.excilys.formation.Dto.CompanyDto;
-import com.excilys.formation.Dto.ListComputerDto;
 import com.excilys.formation.exceptions.InputException;
 import com.excilys.formation.mapper.MapperCompanyDto;
 import com.excilys.formation.mapper.MapperComputerDto;
@@ -27,6 +30,7 @@ import com.excilys.formation.validation.ValidationComputer;
 /**
  * Servlet implementation class AddComputerServlet
  */
+@Controller
 @WebServlet("/AddComputerServlet")
 public class AddComputerServlet extends HttpServlet {
 
@@ -36,25 +40,37 @@ public class AddComputerServlet extends HttpServlet {
 	private static final String COMPANY_ID = "companyId";
 	private static final String LIST_COMPANY = "listCompany";
 	private static final long serialVersionUID = 1L;
-	ComputerService computerService = new ComputerService();
-	CompanyService companyService = new CompanyService();
+	@Autowired
+	ComputerService computerService;
+	@Autowired
+	CompanyService companyService;
+	@Autowired
+	ValidationComputer validationComputer;
+	
 	Computer computer;
 	AddComputerDto cmptDto;
-	ValidationComputer verif = new ValidationComputer();
+	
 	private static Logger LOGGER = LoggerFactory.getLogger(AddComputerServlet.class);
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public AddComputerServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+//	public AddComputerServlet() {
+//		super();
+//		// TODO Auto-generated constructor stub
+//	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	
+	@Override
+    public void init(ServletConfig config) throws ServletException {
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+        super.init(config);
+    }
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -90,7 +106,7 @@ public class AddComputerServlet extends HttpServlet {
 //				.setDiscontinued(discontinued).setCompanyName(cmpnDto).build();
 //		computer = MapperComputerDto.computerDtoToComputer(cmptDto).orElse(computer);
 		System.out.println(computer);
-		if (verif.computerValidation(computer)) {
+		if (validationComputer.computerValidation(computer)) {
 			LOGGER.error("coucou");
 		computerService.createComputerService(computer);
 		}

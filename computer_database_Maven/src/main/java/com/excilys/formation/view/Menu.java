@@ -1,5 +1,8 @@
 package com.excilys.formation.view;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Menu {
 
 	public static final String SEPARATE = "-----------------------------------------------";

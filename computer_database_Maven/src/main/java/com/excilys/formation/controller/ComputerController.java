@@ -3,13 +3,22 @@ package com.excilys.formation.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import com.excilys.formation.DAO.DAOComputer;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.service.ComputerService;
 import com.excilys.formation.view.Page;
 
+@Controller
 public class ComputerController {
-	ComputerService computerService = new ComputerService();
+	ComputerService computerService;
+	
+	@Autowired
+	public ComputerController (ComputerService computerService) {
+		this.computerService = computerService;
+	}
 
 
 	public DAOComputer listComputerController() {

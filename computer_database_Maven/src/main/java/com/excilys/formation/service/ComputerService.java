@@ -4,18 +4,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.excilys.formation.DAO.DAOComputer;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.view.Page;
-@Component
+@Service
 public class ComputerService {
-	@Autowired 
+
 	DAOComputer daocomputer;
 
+	@Autowired
+	public ComputerService (DAOComputer daocomputer) {
+		this.daocomputer = daocomputer;
+	}
 
-	
 	public List<Optional<Computer>> printComputerService(Page page) {
 		return daocomputer.list(page);
 	}

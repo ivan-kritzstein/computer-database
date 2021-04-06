@@ -9,20 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.mapper.MapperComputer;
 import com.excilys.formation.model.Computer;
-import com.excilys.formation.model.Data;
-import com.excilys.formation.view.Page;
+import com.excilys.formation.view.Page; 
 
-@Component
+@Repository
 public class DAOComputer {
 
-	protected Data connect;
+	protected DataSource connect;
 	MapperComputer mapComputer;
 	private static final String REQUEST_CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
 	private static final String REQUEST_DELETE = "delete FROM computer where id=?";
@@ -37,7 +38,7 @@ public class DAOComputer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DAOComputer.class);
 
 	@Autowired
-	public DAOComputer(Data connect, MapperComputer mapperComputer) {
+	public DAOComputer(DataSource connect, MapperComputer mapperComputer) {
 		this.connect = connect;
 		mapComputer = mapperComputer;
 	}
