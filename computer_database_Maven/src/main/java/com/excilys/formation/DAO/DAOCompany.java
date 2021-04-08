@@ -50,7 +50,7 @@ public class DAOCompany {
 	}
 
 	
-	@Transactional(readOnly = false, rollbackFor = { Exception.class }) 
+	@Transactional() 
 	public void delete(Long id) {
 		
 		

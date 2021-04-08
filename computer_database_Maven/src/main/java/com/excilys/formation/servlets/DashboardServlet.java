@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.Dto.ListComputerDto;
@@ -26,7 +27,7 @@ import com.excilys.formation.view.Page;
  */
 @WebServlet("/ComputerServlet")
 //@RequestMapping("/ComputerServlet")
-//@Controller
+@Controller
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String PAGE = "page";
