@@ -107,7 +107,6 @@ public class AddComputerServlet extends HttpServlet {
 //		computer = MapperComputerDto.computerDtoToComputer(cmptDto).orElse(computer);
 		System.out.println(computer);
 		if (validationComputer.computerValidation(computer)) {
-			LOGGER.error("coucou");
 		computerService.createComputerService(computer);
 		}
 		else {

@@ -35,6 +35,7 @@ public class Main {
 // faire fichier avec versions des dependences 
 // changer optional or else null
 // Autowired dans mappercompanyDto ??? 
+// scope des bean?
 
 
 

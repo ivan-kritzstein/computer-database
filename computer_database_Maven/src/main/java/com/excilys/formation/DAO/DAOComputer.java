@@ -1,206 +1,178 @@
 package com.excilys.formation.DAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import com.excilys.formation.mapper.ComputerRowMapper;
 import com.excilys.formation.mapper.MapperComputer;
 import com.excilys.formation.model.Computer;
-import com.excilys.formation.view.Page; 
+import com.excilys.formation.view.Page;
 
 @Repository
 public class DAOComputer {
 
-	protected DataSource connect;
-	MapperComputer mapComputer;
-	private static final String REQUEST_CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?,?,?,?)";
-	private static final String REQUEST_DELETE = "delete FROM computer where id=?";
-	private static final String REQUEST_UPDATE_BY_ID = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = ?, name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE name = ?";
+	private static final String REQUEST_CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (:name , :introduced , :discontinued, :companyId)";
+	private static final String REQUEST_DELETE = "delete FROM computer where id= :id";
+	private static final String REQUEST_UPDATE_BY_ID = "UPDATE computer SET id = :1 , name = :2 , introduced = :3 , discontinued = :4 , company_id = :5 WHERE id = :6";
+	private static final String REQUEST_UPDATE_BY_NAME = "UPDATE computer SET id = :1 , name = :2 , introduced = :3 , discontinued = :4 , company_id = :5 WHERE name = :6";
 	private static final String REQUEST_DETAILS_WHITH_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.id = ";
-	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ? ";
-	private static final String NBR_COMPUTER = "SELECT COUNT(id) FROM computer WHERE computer.name LIKE ?";
-	private static final String REQUEST_LIST_LIKE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE ?";
-	private static final String REQUEST_LIMIT_OFFSET = " LIMIT ? OFFSET ?";
+	private static final String REQUEST_DETAILS_WHITH_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name = ";
+	private static final String NBR_COMPUTER = "SELECT COUNT(id) FROM computer WHERE computer.name LIKE :count";
+	private static final String REQUEST_LIST_LIKE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.id, company.name FROM computer LEFT JOIN company ON company.id = computer.company_id WHERE computer.name LIKE :search";
+	private static final String REQUEST_LIMIT_OFFSET = " LIMIT :limit OFFSET :offset";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DAOComputer.class);
 
+	protected DataSource connect;
+	MapperComputer mapComputer;
+	ComputerRowMapper computerRowMapper;
+	JdbcTemplate jdbcTemplate;
+	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
 	@Autowired
-	public DAOComputer(DataSource connect, MapperComputer mapperComputer) {
+	public DAOComputer(DataSource connect, MapperComputer mapperComputer, ComputerRowMapper computerRowMapper,
+			JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.connect = connect;
-		mapComputer = mapperComputer;
+		this.mapComputer = mapperComputer;
+		this.computerRowMapper = computerRowMapper;
+		this.jdbcTemplate = jdbcTemplate;
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 
 	public void create(Computer computer) {
-
-		PreparedStatement preparedSelect;
-		try (Connection con = connect.getConnection()) {
-			preparedSelect = con.prepareStatement(REQUEST_CREATE);
-			preparedSelect.setString(1, computer.getName());
-			if (computer.getIntroduced() != null) {
-				preparedSelect.setDate(2, java.sql.Date.valueOf(computer.getIntroduced()));
-			} else {
-				preparedSelect.setDate(2, null);
-			}
-			if (computer.getDiscontinued() != null) {
-				preparedSelect.setDate(3, java.sql.Date.valueOf(computer.getDiscontinued()));
-			} else {
-				preparedSelect.setDate(3, null);
-			}
-			if (computer.getCompany().getId() != null && computer.getCompany().getId() != 0) {
-				preparedSelect.setObject(4, computer.getCompany().getId());
-			} else {
-				preparedSelect.setObject(4, null);
-			}
-			preparedSelect.execute();
-		} catch (SQLException e) {
+		
+		try {
+			SqlParameterSource namedParameters = new MapSqlParameterSource()
+					.addValue("name", computer.getName())
+					.addValue("introduced", computer.getIntroduced() != null ? java.sql.Date.valueOf(computer.getIntroduced()) : null)
+					.addValue("discontinued", computer.getDiscontinued() != null ? java.sql.Date.valueOf(computer.getDiscontinued()) : null)
+					.addValue("companyId", computer.getCompany().getId() != null && computer.getCompany().getId() != 0 ? computer.getCompany().getId() : null);
+			
+			namedParameterJdbcTemplate.update(REQUEST_CREATE, namedParameters);
+		} catch (DataAccessException e) {
 			// TODO Auto-generated catch block
 			LOGGER.error(e.getMessage());
-			e.printStackTrace();
 		}
 
 	}
 
 	public void delete(Long id) {
 
-		PreparedStatement preparedDelete;
-		try (Connection con = connect.getConnection()) {
-			preparedDelete = con.prepareStatement(REQUEST_DELETE);
-			if (id != null && id != 0) {
-			preparedDelete.setLong(1, id);
-			}
-			preparedDelete.execute();
-
-		} catch (SQLException e) {
+		try {
+			SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", id != null && id != 0 ? id : null);
+			
+			namedParameterJdbcTemplate.update(REQUEST_DELETE, namedParameters);
+		} catch (DataAccessException e1) {
 			// TODO Auto-generated catch block
-			LOGGER.error(e.getMessage());
+			LOGGER.error(e1.getMessage());
 		}
 	}
-
+	
 	public void updateById(Long id, Computer computer) {
-		PreparedStatement preparedUpdate;
-
-		try (Connection con = connect.getConnection()) {
-			preparedUpdate = con.prepareStatement(REQUEST_UPDATE_BY_ID);
-			preparedUpdate.setLong(1, computer.getId());
-			preparedUpdate.setString(2, computer.getName());
-			if (computer.getIntroduced() != null) {
-				preparedUpdate.setDate(3, java.sql.Date.valueOf(computer.getIntroduced()));
-			} else {
-				preparedUpdate.setDate(3, null);
-			}
-			if (computer.getDiscontinued() != null) {
-				preparedUpdate.setDate(4, java.sql.Date.valueOf(computer.getDiscontinued()));
-			} else {
-				preparedUpdate.setDate(4, null);
-			}
-			if (computer.getCompany().getId() != null && computer.getCompany().getId() != 0) {
-				preparedUpdate.setObject(5, computer.getCompany().getId());
-			} else {
-				preparedUpdate.setObject(5, null);
-			}
-			preparedUpdate.setLong(6, id);
-			preparedUpdate.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			LOGGER.error(e.getMessage());
+		
+		try {
+			SqlParameterSource namedParameters = new MapSqlParameterSource()
+					.addValue("1", computer.getId())
+					.addValue("2", computer.getName())
+					.addValue("3", (computer.getIntroduced() != null ? java.sql.Date.valueOf(computer.getIntroduced()) : null))
+					.addValue("4", (computer.getDiscontinued() != null ? java.sql.Date.valueOf(computer.getDiscontinued()) : null))
+					.addValue("5", (computer.getCompany().getId() != null && computer.getCompany().getId() != 0 ? computer.getCompany().getId() : null))
+					.addValue("6", id);
+			
+			namedParameterJdbcTemplate.update(REQUEST_UPDATE_BY_ID, namedParameters);
+		} catch (DataAccessException e1) {
+			LOGGER.error(e1.getMessage()+e1.getStackTrace());
 		}
+		
 
 	}
 
 	public void updateByName(String name, Computer computer) {
 
-		PreparedStatement preparedUpdate;
-
-		try (Connection con = connect.getConnection()) {
-			preparedUpdate = con.prepareStatement(REQUEST_UPDATE_BY_NAME);
-			preparedUpdate.setLong(1, computer.getId());
-			preparedUpdate.setString(2, computer.getName());
-			preparedUpdate.setDate(3, java.sql.Date.valueOf(computer.getIntroduced()));
-			preparedUpdate.setDate(4, java.sql.Date.valueOf(computer.getDiscontinued()));
-			preparedUpdate.setObject(5, computer.getCompany().getId());
-			preparedUpdate.setString(6, name);
-			preparedUpdate.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			LOGGER.error(e.getMessage());
+		try {
+			SqlParameterSource namedParameters = new MapSqlParameterSource()
+					.addValue("1", computer.getId())
+					.addValue("2", computer.getName())
+					.addValue("3", (computer.getIntroduced() != null ? java.sql.Date.valueOf(computer.getIntroduced()) : null))
+					.addValue("4", (computer.getDiscontinued() != null ? java.sql.Date.valueOf(computer.getDiscontinued()) : null))
+					.addValue("5", (computer.getCompany().getId() != null && computer.getCompany().getId() != 0 ? computer.getCompany().getId() : null))
+					.addValue("6", name);
+			
+			namedParameterJdbcTemplate.update(REQUEST_UPDATE_BY_NAME, namedParameters);
+		} catch (DataAccessException e1) {
+			LOGGER.error(e1.getMessage()+e1.getStackTrace());
 		}
 
 	}
 
 	public Optional<Computer> showDetailsWithId(Long id) {
-		Optional<Computer> computer = Optional.ofNullable(new Computer.ComputerBuilder().build());
-		try (Connection con = connect.getConnection()) {
-			Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			ResultSet result = statement.executeQuery(REQUEST_DETAILS_WHITH_ID + id);
-			if (result.first()) {
-				computer = mapComputer.dataSqlToComputer(result);
-			}
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
+		Computer computer = new Computer.ComputerBuilder().build();
+
+		try {
+			computer = jdbcTemplate.queryForObject(REQUEST_DETAILS_WHITH_ID + id, computerRowMapper);
+		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage() + e.getStackTrace());
 		}
-		return computer;
+
+		return Optional.ofNullable(computer);
 	}
 
 	public Optional<Computer> showDetailsWithName(String name) {
 
-		Optional<Computer> computer = Optional.ofNullable(new Computer.ComputerBuilder().build());
-
-		try (Connection con = connect.getConnection()) {
-			Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			ResultSet result = statement.executeQuery(REQUEST_DETAILS_WHITH_NAME + "'" + name + "'");
-			if (result.first()) {
-				computer = mapComputer.dataSqlToComputer(result);
-			}
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
+		Computer computer = new Computer.ComputerBuilder().build();
+		try {
+			computer = jdbcTemplate.queryForObject(REQUEST_DETAILS_WHITH_NAME + "'" + name + "'", computerRowMapper);
+		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage() + e.getStackTrace());
 		}
-		return computer;
+		return Optional.ofNullable(computer);
 	}
 
 	public List<Optional<Computer>> list(Page page) {
-		List<Optional<Computer>> listeComputer = new ArrayList<Optional<Computer>>();
+		List<Optional<Computer>> listeOptionalComputer = new ArrayList<Optional<Computer>>();
+		List<Computer> listeComputer = new ArrayList<Computer>();
+		try {
+			SqlParameterSource namedParameters = new MapSqlParameterSource()
+					.addValue("search", "%" + page.getSearchComputer() + "%").addValue("limit", page.getLimit())
+					.addValue("offset", page.getOffset());
 
-		try (Connection con = connect.getConnection();
-				PreparedStatement prepareList = con.prepareStatement(
-						REQUEST_LIST_LIKE + " ORDER BY " + page.getOrderBy() + REQUEST_LIMIT_OFFSET)) {
-			prepareList.setString(1, "%" + page.getSearchComputer() + "%");
-			prepareList.setInt(2, page.getLimit());
-			prepareList.setInt(3, page.getOffset());
-			ResultSet result = prepareList.executeQuery();
-			listeComputer = mapComputer.dataSqlToListComputer(result);
+			listeComputer = namedParameterJdbcTemplate.query(
+					REQUEST_LIST_LIKE + " ORDER BY " + page.getOrderBy() + REQUEST_LIMIT_OFFSET, namedParameters,
+					computerRowMapper);
 			page.setNbrComputer(sizeListComputer(page));
+			listeOptionalComputer = listeComputer.stream().map(x -> Optional.ofNullable(x))
+					.collect(Collectors.toList());
 
-		} catch (SQLException e) {
-			LOGGER.error(e.getMessage());
+		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage() + e.getStackTrace());
 		}
-		return listeComputer;
+		return listeOptionalComputer;
 	}
 
 	public int sizeListComputer(Page page) {
-		try (Connection con = connect.getConnection();
-				PreparedStatement prepareList = con.prepareStatement(NBR_COMPUTER)) {
-			prepareList.setString(1, "%" + page.getSearchComputer() + "%");
-			ResultSet result = prepareList.executeQuery();
-			result.next();
-			return result.getInt("count(id)");
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			LOGGER.error(e.getMessage());
+		try {
+			SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("count",
+					"%" + page.getSearchComputer() + "%");
+			return namedParameterJdbcTemplate.queryForObject(NBR_COMPUTER, namedParameters, Integer.class);
+		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage() + e.getStackTrace());
 		}
+
 		return -1;
 	}
 

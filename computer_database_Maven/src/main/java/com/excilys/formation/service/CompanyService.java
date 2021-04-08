@@ -16,7 +16,6 @@ public class CompanyService {
 	@Autowired
 	public CompanyService(DAOCompany daocompany) {
 		this.daocompany = daocompany;
-		System.out.println("coucou Ulysse");
 	}
 	
 	public List<Optional<Company>> listCompaniesService() {

@@ -9,11 +9,7 @@ public class Computer {
 	private LocalDate introduced;
 	private LocalDate discontinued;
 
-// passer en privé cstr
-	// dans le builder que le set
-//	get de classe computer
-	// class computer builder : que des set qui renvoient computerbuilder
-	// avantages : que 1 seul constructeur
+
 
 	private Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
 		this.id = id;

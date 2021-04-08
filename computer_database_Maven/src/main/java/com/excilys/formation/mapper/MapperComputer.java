@@ -15,6 +15,15 @@ import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
 @Component
 public class MapperComputer {
+	
+//	public List<Optional<Computer>> listComputerToListOptionalComputer(List<Computer> listComputer){
+//		List<Optional<Computer>> listOptionalComputer = new ArrayList<Optional<Computer>>();
+//		
+//		for(Computer computer : listComputer) {
+//			computer = Optional<computer>;
+//		}
+//		return listOptionalComputer;
+//	}
 
 	private static Logger LOGGER = LoggerFactory.getLogger(MapperComputer.class);
 	public Optional<Computer> dataSqlToComputer(ResultSet result) {

@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 //
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -36,6 +38,18 @@ private static final String DB_PROPERTIES_NAME = "/db.properties";
 	public DataSource getDataSource() {
 		HikariConfig config = new HikariConfig(DB_PROPERTIES_NAME);
 		return new HikariDataSource(config);
+	}
+	
+	@Bean
+	public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
+	JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+	return jdbcTemplate;
+	}
+	
+	@Bean
+	public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate(DataSource dataSource) {
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		return namedParameterJdbcTemplate;
 	}
 	
 	@Override
