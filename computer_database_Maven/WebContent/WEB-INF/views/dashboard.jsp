@@ -1,5 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt"%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,30 +17,40 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href=dashboard> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href=dashboard> <fmt:message
+					key="lbl.dashboard.header" />
+			</a>
+			<ul>
+				<li><a href="?lang=fr"><fmt:message
+							key="lbl.dashboard.lang.fr" /></a></li>
+				<li><a href="?lang=en"><fmt:message
+							key="lbl.dashboard.lang.en" /></a></li>
+			</ul>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.nbrComputer}</h1>
-			 
+			<h1 id="homeTitle">${page.nbrComputer}
+				<fmt:message key="lbl.dashboard.found" />
+			</h1>
+
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" href=dashboard?search="search"/>
+							type="submit" id="searchsubmit"
+							value="<fmt:message key="lbl.dashboard.filter" />"
+							class="btn btn-primary" href=dashboard?search= "search"/>
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer"
-						href="addComputer">Add Computer</a> <a
-						class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><fmt:message
+							key="lbl.dashboard.add" /></a> <a class="btn btn-default"
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><fmt:message
+							key="lbl.dashboard.edit" /></a>
 				</div>
 			</div>
 		</div>
@@ -45,9 +58,9 @@
 
 
 
-			<form id="deleteForm" action="dashboard" method="POST">
-				<input type="hidden" name="selection" value="" id="selection">
-			</form>
+		<form id="deleteForm" action="dashboard" method="POST">
+			<input type="hidden" name="selection" value="" id="selection">
+		</form>
 
 
 		<div class="container" style="margin-top: 10px;">
@@ -64,15 +77,16 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href="dashboard?order=computer.name">
-								Computer name </a></th>
-						<th><a href="dashboard?order=computer.introduced">Introduced
-								date</a></th>
+						<th><a href="dashboard?order=computer.name"> <fmt:message
+							key="lbl.dashboard.computerName" /> </a></th>
+						<th><a href="dashboard?order=computer.introduced"><fmt:message
+							key="lbl.dashboard.introducedDate" /></a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a href="dashboard?order=computer.discontinued">Discontinued
-								date</a></th>
+						<th><a href="dashboard?order=computer.discontinued"><fmt:message
+							key="lbl.dashboard.discontinuedDate" /></a></th>
 						<!-- Table header for Company -->
-						<th><a href="dashboard?order=company.name">Company</a></th>
+						<th><a href="dashboard?order=company.name"><fmt:message
+							key="lbl.dashboard.company" /></a></th>
 
 					</tr>
 				</thead>
@@ -84,8 +98,8 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computerDto.id}"></td>
-							<td><a href="editComputer?computerId=${computerDto.id}" onclick="">
-									${computerDto.name}</a></td>
+							<td><a href="editComputer?computerId=${computerDto.id}"
+								onclick=""> ${computerDto.name}</a></td>
 							<td>${computerDto.introduced}</td>
 							<td>${computerDto.discontinued}</td>
 							<td>${computerDto.companyName}</td>
@@ -106,7 +120,7 @@
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 				<%-- <c:forEach var="page" items="${page}"> --%>
-				<li><a href="dashboard?offset=${index1}" >${index1}</a></li>
+				<li><a href="dashboard?offset=${index1}">${index1}</a></li>
 				<li><a href="dashboard?offset=${index2}">${index2}</a></li>
 				<li><a href="dashboard?offset=${index3}">${index3}</a></li>
 				<li><a href="dashboard?offset=${index4}">${index4}</a></li>

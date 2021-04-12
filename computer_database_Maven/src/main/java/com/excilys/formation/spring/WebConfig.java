@@ -5,9 +5,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 import javax.sql.DataSource;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -16,11 +18,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -37,14 +42,6 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class WebConfig implements WebMvcConfigurer, WebApplicationInitializer {
 	private static final String DB_PROPERTIES_NAME = "/db.properties";
-
-//	@Override
-//	protected WebApplicationContext createRootApplicationContext() {
-//		// TODO Auto-generated method stub
-//		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-//		ctx.register(WebConfig.class);
-//		return ctx;
-//	}
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
@@ -86,19 +83,16 @@ public class WebConfig implements WebMvcConfigurer, WebApplicationInitializer {
 		return new DataSourceTransactionManager(getDataSource());
 	}
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-	}
+//	@Override
+//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+	
+//	}
 
 //	--------------------------------------------------------------------------------------------------
 //											SPRING MVC
 //    --------------------------------------------------------------------------------------------------
 
-//	@Override
-//	public void addViewControllers(ViewControllerRegistry registry) {
-//		registry.addViewController("/").setViewName("index");
-//	}
 
 	@Bean
 	public ViewResolver viewResolver() {
@@ -114,5 +108,32 @@ public class WebConfig implements WebMvcConfigurer, WebApplicationInitializer {
 //	   --------------------------------------------------------------------------------------------------
 //											SPRING MVC
 //    --------------------------------------------------------------------------------------------------
+
+//	--------------------------------------------------------------------------------------------------
+//												I18N
+//--------------------------------------------------------------------------------------------------
+
+	
+	@Bean("messageSource")
+	public MessageSource messageSource() {
+	    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+	    messageSource.setBasenames("I18N/message");
+	    messageSource.setDefaultEncoding("UTF-8");
+	    return messageSource;
+	}
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+	    LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+	    localeChangeInterceptor.setParamName("lang");
+	    registry.addInterceptor(localeChangeInterceptor);
+	}
+	
+	@Bean
+	public LocaleResolver localeResolver() {
+	    return new SessionLocaleResolver();
+	}
+//	--------------------------------------------------------------------------------------------------
+//												I18N
+//--------------------------------------------------------------------------------------------------
 
 }
