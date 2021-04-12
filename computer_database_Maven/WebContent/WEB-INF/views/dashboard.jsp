@@ -14,7 +14,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href=ComputerServlet> Application -
+			<a class="navbar-brand" href=dashboard> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -22,6 +22,7 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">${page.nbrComputer}</h1>
+			 
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -29,12 +30,12 @@
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
 							type="submit" id="searchsubmit" value="Filter by name"
-							class="btn btn-primary" href=ComputerServlet?search="search"/>
+							class="btn btn-primary" href=dashboard?search="search"/>
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="AddComputerServlet">Add Computer</a> <a
+						href="addComputer">Add Computer</a> <a
 						class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -44,7 +45,7 @@
 
 
 
-			<form id="deleteForm" action="ComputerServlet" method="POST">
+			<form id="deleteForm" action="dashboard" method="POST">
 				<input type="hidden" name="selection" value="" id="selection">
 			</form>
 
@@ -63,15 +64,15 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a href="ComputerServlet?order=computer.name">
+						<th><a href="dashboard?order=computer.name">
 								Computer name </a></th>
-						<th><a href="ComputerServlet?order=computer.introduced">Introduced
+						<th><a href="dashboard?order=computer.introduced">Introduced
 								date</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a href="ComputerServlet?order=computer.discontinued">Discontinued
+						<th><a href="dashboard?order=computer.discontinued">Discontinued
 								date</a></th>
 						<!-- Table header for Company -->
-						<th><a href="ComputerServlet?order=company.name">Company</a></th>
+						<th><a href="dashboard?order=company.name">Company</a></th>
 
 					</tr>
 				</thead>
@@ -83,7 +84,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computerDto.id}"></td>
-							<td><a href="EditServlet?computerId=${computerDto.id}" onclick="">
+							<td><a href="editComputer?computerId=${computerDto.id}" onclick="">
 									${computerDto.name}</a></td>
 							<td>${computerDto.introduced}</td>
 							<td>${computerDto.discontinued}</td>
@@ -105,20 +106,20 @@
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 				<%-- <c:forEach var="page" items="${page}"> --%>
-				<li><a href="ComputerServlet?offset=${index1}" >${index1}</a></li>
-				<li><a href="ComputerServlet?offset=${index2}">${index2}</a></li>
-				<li><a href="ComputerServlet?offset=${index3}">${index3}</a></li>
-				<li><a href="ComputerServlet?offset=${index4}">${index4}</a></li>
-				<li><a href="ComputerServlet?offset=${index5}">${index5}</a></li>
+				<li><a href="dashboard?offset=${index1}" >${index1}</a></li>
+				<li><a href="dashboard?offset=${index2}">${index2}</a></li>
+				<li><a href="dashboard?offset=${index3}">${index3}</a></li>
+				<li><a href="dashboard?offset=${index4}">${index4}</a></li>
+				<li><a href="dashboard?offset=${index5}">${index5}</a></li>
 				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 						<%-- </c:forEach> --%>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="ComputerServlet?limit=10" class="btn btn-default">10</a> <a
-					href="ComputerServlet?limit=50" class="btn btn-default">50</a> <a
-					href="ComputerServlet?limit=100" class="btn btn-default">100</a>
+				<a href="dashboard?limit=10" class="btn btn-default">10</a> <a
+					href="dashboard?limit=50" class="btn btn-default">50</a> <a
+					href="dashboard?limit=100" class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>

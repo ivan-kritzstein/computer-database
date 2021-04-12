@@ -18,7 +18,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.mapper.ComputerRowMapper;
-import com.excilys.formation.mapper.MapperComputer;
 import com.excilys.formation.model.Computer;
 import com.excilys.formation.view.Page;
 
@@ -38,16 +37,14 @@ public class DAOComputer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DAOComputer.class);
 
 	protected DataSource connect;
-	MapperComputer mapComputer;
 	ComputerRowMapper computerRowMapper;
 	JdbcTemplate jdbcTemplate;
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Autowired
-	public DAOComputer(DataSource connect, MapperComputer mapperComputer, ComputerRowMapper computerRowMapper,
+	public DAOComputer(DataSource connect, ComputerRowMapper computerRowMapper,
 			JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.connect = connect;
-		this.mapComputer = mapperComputer;
 		this.computerRowMapper = computerRowMapper;
 		this.jdbcTemplate = jdbcTemplate;
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;

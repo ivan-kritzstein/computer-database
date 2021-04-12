@@ -19,7 +19,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.mapper.CompanyRowMapper;
-import com.excilys.formation.mapper.MapperCompany;
 import com.excilys.formation.model.Company;
 
 @Repository
@@ -33,17 +32,15 @@ public class DAOCompany {
 	private static Logger LOGGER = LoggerFactory.getLogger(DAOCompany.class);
 
 	protected DataSource connect;
-	MapperCompany mapCompany;
 	CompanyRowMapper companyRowMapper;
 	JdbcTemplate jdbcTemplate;
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Autowired
-	public DAOCompany(DataSource connect, MapperCompany mapperCompany, CompanyRowMapper companyRowMapper,
+	public DAOCompany(DataSource connect, CompanyRowMapper companyRowMapper,
 			JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 
 		this.connect = connect;
-		this.mapCompany = mapperCompany;
 		this.companyRowMapper = companyRowMapper;
 		this.jdbcTemplate = jdbcTemplate;
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -52,7 +49,6 @@ public class DAOCompany {
 	
 	@Transactional() 
 	public void delete(Long id) {
-		
 		
 		deleteComputerOfCompany(id);
 		SqlParameterSource namedParameters = new MapSqlParameterSource()

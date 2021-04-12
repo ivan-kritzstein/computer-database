@@ -34,8 +34,6 @@ public class Main {
 // enlever le null de AddComputerServlet dans cmpnDto
 // faire fichier avec versions des dependences 
 // changer optional or else null
-// Autowired dans mappercompanyDto ??? 
-// scope des bean?
 
 
 

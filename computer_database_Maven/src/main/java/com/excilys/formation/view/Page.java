@@ -1,7 +1,8 @@
 package com.excilys.formation.view;
 
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Page {
 	private static final int ZERO = 0;
 	private static final int UN = 1;
