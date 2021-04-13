@@ -19,9 +19,6 @@ public class MapperComputerDto {
 		String companyName = null;
 		String introduced = null;
 		String discontinued = null;
-//		Company company = new Company();
-//		String companyDto = new String();
-//		String companyName = null;
 
 		String id = computer.getId().toString();
 		String name = computer.getName();
@@ -37,8 +34,6 @@ public class MapperComputerDto {
 			companyName = computer.getCompany().getName();
 		}
 
-//		company = computer.getCompany();
-//		companyDto = MapperCompanyDto.companyToCompanyDto(company);
 
 		cmptDto = new ListComputerDto.ListComputerDtoBuilder().setId(id).setName(name).setIntroduced(introduced)
 				.setDiscontinued(discontinued).setCompanyName(companyName).build();
@@ -67,7 +62,7 @@ public class MapperComputerDto {
 		String name = null;
 		LocalDate introduced = null;
 		LocalDate discontinued = null;
-//		String companyDto = new String();
+
 		Company company = new Company();
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -89,7 +84,7 @@ public class MapperComputerDto {
 			company.setName(cmptDto.getCompanyName());
 		}
 
-//		company = MapperCompanyDto.companyDtoToCompany(companyDto);
+
 
 		computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
 				.setDiscontinued(discontinued).setCompany(company).build();
@@ -104,7 +99,7 @@ public class MapperComputerDto {
 		String name = null;
 		LocalDate introduced = null;
 		LocalDate discontinued = null;
-//		String companyDto = new String();
+
 		Company company = new Company();
 		DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -126,7 +121,7 @@ public class MapperComputerDto {
 			company.setId(Long.parseLong(cmptDto.getCompanyId()));
 		} 
 
-//		company = MapperCompanyDto.companyDtoToCompany(companyDto);
+
 
 		computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
 				.setDiscontinued(discontinued).setCompany(company).build();

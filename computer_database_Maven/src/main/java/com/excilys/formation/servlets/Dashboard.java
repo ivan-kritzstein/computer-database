@@ -17,9 +17,7 @@ import com.excilys.formation.service.ComputerService;
 import com.excilys.formation.validation.ValidationComputer;
 import com.excilys.formation.view.Page;
 
-/**
- * Servlet implementation class ComputerServlet
- */
+
 @SessionAttributes("page")
 @Controller
 public class Dashboard {
@@ -46,7 +44,7 @@ public class Dashboard {
 	@Autowired
 	Page page;
 
-//	@Override
+
 	@GetMapping("/dashboard")
 	public ModelAndView dashboardGet(@RequestParam(required = false) String offset,
 			@RequestParam(required = false) String limit, @RequestParam(required = false) String order,
@@ -55,9 +53,9 @@ public class Dashboard {
 		ModelAndView modelAndView = new ModelAndView("dashboard");
 		List<ListComputerDto> listeComputerDto = new ArrayList<ListComputerDto>();
 
-		page = buttonLimit(page, limit, modelAndView);
-		page = orderBy(page, order, modelAndView);
-		page = searchName(page, search, modelAndView);
+		page = buttonLimit(page, limit);
+		page = orderBy(page, order);
+		page = searchName(page, search);
 		page = indexPage(page, offset, modelAndView);
 
 		listeComputerDto = MapperComputerDto
@@ -85,7 +83,7 @@ public class Dashboard {
 		return dashboardGet(null, null, null, null);
 	}
 
-	public Page buttonLimit(Page page, String limit, ModelAndView modelAndView) {
+	public Page buttonLimit(Page page, String limit) {
 		if (limit != null) {
 			if (limit.toString().equals("10")) {
 				page.setLimit(LIMIT_10);
@@ -98,7 +96,7 @@ public class Dashboard {
 		return page;
 	}
 
-	public Page orderBy(Page page, String order, ModelAndView modelAndView) {
+	public Page orderBy(Page page, String order) {
 		if (order != null) {
 			if (order.toString().equals(ORDER_COMPUTER)) {
 				page.setOrderBy(ORDER_COMPUTER);
@@ -113,7 +111,7 @@ public class Dashboard {
 		return page;
 	}
 
-	public Page searchName(Page page, String search, ModelAndView modelAndView) {
+	public Page searchName(Page page, String search) {
 		if (search != null) {
 			String s = search;
 			page.setSearchComputer(s);

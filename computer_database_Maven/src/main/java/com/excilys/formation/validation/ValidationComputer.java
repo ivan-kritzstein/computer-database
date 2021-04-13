@@ -20,10 +20,6 @@ public class ValidationComputer {
 			}
 		}
 		
-//		if(null == computer.getCompany().getId()) {
-//			verif = false;
-//		}
-
 		return verif;
 
 	}

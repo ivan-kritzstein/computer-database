@@ -23,8 +23,6 @@ public class MapperCompanyDto {
 			name = company.getName();
 		}
 
-//		company = computer.getCompany();
-//		companyDto = MapperCompanyDto.companyToCompanyDto(company);
 
 		companyDto = new CompanyDto.CompanyDtoBuilder().setName(name).setId(id).build();
 

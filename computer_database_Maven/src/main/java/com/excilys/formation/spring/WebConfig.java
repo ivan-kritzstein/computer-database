@@ -83,9 +83,6 @@ public class WebConfig implements WebMvcConfigurer, WebApplicationInitializer {
 		return new DataSourceTransactionManager(getDataSource());
 	}
 
-//	@Override
-//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	
 //	}
 
