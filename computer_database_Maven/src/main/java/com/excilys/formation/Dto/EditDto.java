@@ -5,7 +5,6 @@ public class EditDto {
 	private String id;
 	private String name;
 	private String companyId;
-	// private String companyName;
 	private String introduced;
 	private String discontinued;
 

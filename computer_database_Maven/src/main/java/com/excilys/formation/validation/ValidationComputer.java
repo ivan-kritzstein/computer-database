@@ -1,36 +1,75 @@
 package com.excilys.formation.validation;
 
-import org.springframework.stereotype.Component;
+import java.time.LocalDate;
 
-import com.excilys.formation.model.Computer;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+
+import com.excilys.formation.Dto.AddComputerDto;
 
 @Component
-public class ValidationComputer {
+public class ValidationComputer implements Validator {
 
-	public boolean computerValidation(Computer computer) {
-		boolean verif = true;
-		if ("" == computer.getName() || null == computer.getName() || computer.getName().isBlank()) {
-			verif = false;
+	private void nameComputerDtoValidation(AddComputerDto computerDto, Errors errors) {
+		if ("" == computerDto.getName() || null == computerDto.getName() || computerDto.getName().isBlank()) {
+			errors.rejectValue("name", "lbl.valid.name");
 		}
+	}
 
-		if (null != computer.getIntroduced() && null != computer.getDiscontinued()) {
-			if (computer.getIntroduced().isAfter(computer.getDiscontinued())
-					|| computer.getIntroduced().isEqual(computer.getDiscontinued())) {
-				verif = false;
+	private void introducedBeforDiscontinuedValidation(AddComputerDto computerDto, Errors errors) {
+
+		if (null != computerDto.getIntroduced() && computerDto.getIntroduced().compareTo("") != 0
+				&& null != computerDto.getDiscontinued() && computerDto.getDiscontinued().compareTo("") != 0) {
+			LocalDate introduced = LocalDate.parse(computerDto.getIntroduced());
+			LocalDate discontinued = LocalDate.parse(computerDto.getDiscontinued());
+
+			if (introduced.isAfter(discontinued) || introduced.isEqual(discontinued)) {
+				errors.rejectValue("introduced", "lbl.valid.introducedDate");
 			}
 		}
-		
-		return verif;
-
 	}
-	
+	private void discontinuedAfterIntroducedValidation(AddComputerDto computerDto, Errors errors) {
+
+		if (null != computerDto.getIntroduced() && computerDto.getIntroduced().compareTo("") != 0
+				&& null != computerDto.getDiscontinued() && computerDto.getDiscontinued().compareTo("") != 0) {
+			LocalDate introduced = LocalDate.parse(computerDto.getIntroduced());
+			LocalDate discontinued = LocalDate.parse(computerDto.getDiscontinued());
+
+			if (discontinued.isBefore(introduced) || discontinued.isEqual(introduced)) {
+				errors.rejectValue("discontinued", "lbl.valid.discontinuedDate");
+			}
+		}
+	}
+
+
+
 	public boolean deleteValidation(String s) {
 		boolean verif = true;
-		
-		if(s == null || s == "") {
+
+		if (s == null || s == "") {
 			verif = false;
 		}
-		
+
 		return verif;
 	}
+
+	@Override
+	public boolean supports(Class<?> clazz) {
+		// TODO Auto-generated method stub
+
+		return AddComputerDto.class.equals(clazz);
+	}
+
+	@Override
+	public void validate(Object target, Errors errors) {
+		// TODO Auto-generated method stub
+
+		AddComputerDto computerDto = (AddComputerDto) target;
+		nameComputerDtoValidation(computerDto, errors);
+		introducedBeforDiscontinuedValidation(computerDto, errors);
+		discontinuedAfterIntroducedValidation(computerDto, errors);
+
+	}
+
 }

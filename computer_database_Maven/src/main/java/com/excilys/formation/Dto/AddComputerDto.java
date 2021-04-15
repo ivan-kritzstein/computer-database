@@ -17,6 +17,10 @@ public class AddComputerDto {
 			this.companyId = companyId;
 		}
 
+		public AddComputerDto() {
+			// TODO Auto-generated constructor stub
+		}
+
 		public String getId() {
 			return id;
 		}
