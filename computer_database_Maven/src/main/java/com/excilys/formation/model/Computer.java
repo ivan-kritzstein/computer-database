@@ -3,13 +3,12 @@ package com.excilys.formation.model;
 import java.time.LocalDate;
 
 public class Computer {
-	private String name;
+
 	private Long id;
-	private Company company;
+	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-
-
+	private Company company;
 
 	private Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
 		this.id = id;
@@ -100,6 +99,6 @@ public class Computer {
 	public String toString() {
 
 		return "id = " + id + " name = " + name + " introduced date = " + introduced + " discontinued date = "
-				+ discontinued +  (company != null ? company.toString() : null);
+				+ discontinued + (company != null ? company.toString() : null);
 	}
 }

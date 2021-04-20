@@ -1,13 +1,28 @@
 package com.excilys.formation.Dto;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "computer")
 public class ListComputerDto {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private String id;
+	@Column(name = "name")
 	private String name;
-	private String companyName;
-	// private String companyName;
+	@Column(name = "introduced")
 	private String introduced;
+	@Column(name = "discontinued")
 	private String discontinued;
+	@Column(name = "company_id")
+	private String companyName;
 
 	private ListComputerDto(String id, String name, String introduced, String discontinued, String companyName) {
 		this.id = id;

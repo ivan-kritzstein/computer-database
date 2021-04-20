@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.excilys.formation.Dto.AddComputerDto;
+import com.excilys.formation.Dto.CompanyHQLDto;
+import com.excilys.formation.Dto.ComputerHQLDto;
 import com.excilys.formation.Dto.ListComputerDto;
 import com.excilys.formation.model.Company;
 import com.excilys.formation.model.Computer;
@@ -33,7 +35,6 @@ public class MapperComputerDto {
 		if (computer.getCompany().getName() != null) {
 			companyName = computer.getCompany().getName();
 		}
-
 
 		cmptDto = new ListComputerDto.ListComputerDtoBuilder().setId(id).setName(name).setIntroduced(introduced)
 				.setDiscontinued(discontinued).setCompanyName(companyName).build();
@@ -84,8 +85,6 @@ public class MapperComputerDto {
 			company.setName(cmptDto.getCompanyName());
 		}
 
-
-
 		computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
 				.setDiscontinued(discontinued).setCompany(company).build();
 
@@ -117,15 +116,83 @@ public class MapperComputerDto {
 		if (cmptDto.getDiscontinued() != null && cmptDto.getDiscontinued().compareTo("") != 0) {
 			discontinued = LocalDate.parse(cmptDto.getDiscontinued(), df);
 		}
-		if (cmptDto.getCompanyId() != null) {
-			company.setId(Long.parseLong(cmptDto.getCompanyId()));
-		} 
-
-
+		if (cmptDto.getCompany_id() != null) {
+			company.setId(Long.parseLong(cmptDto.getCompany_id()));
+		}
 
 		computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
 				.setDiscontinued(discontinued).setCompany(company).build();
 
 		return Optional.ofNullable(computer);
+	}
+
+	public static Optional<Computer> computerHQLDtoToComputer(ComputerHQLDto computerHQLDto) {
+		Computer computer = new Computer.ComputerBuilder().build();
+
+		Long id = null;
+		String name = null;
+		LocalDate introduced = null;
+		LocalDate discontinued = null;
+
+		Company company = new Company();
+
+		if (computerHQLDto.getId() != null) {
+			id = computerHQLDto.getId();
+		}
+
+		if (null != computerHQLDto.getName()) {
+			name = computerHQLDto.getName();
+		}
+
+		if (null != computerHQLDto.getIntroduced()) {
+			introduced = computerHQLDto.getIntroduced();
+		}
+		if (computerHQLDto.getDiscontinued() != null) {
+			discontinued = computerHQLDto.getDiscontinued();
+		}
+		if (computerHQLDto.getCompanyHQLDto() != null) {
+			company.setId(computerHQLDto.getCompanyHQLDto().getId());
+			company.setName(computerHQLDto.getCompanyHQLDto().getName());
+		}
+
+		computer = new Computer.ComputerBuilder().setId(id).setName(name).setIntroduced(introduced)
+				.setDiscontinued(discontinued).setCompany(company).build();
+
+		return Optional.ofNullable(computer);
+	}
+
+	public static ComputerHQLDto computerToComputerHQLDto(Computer computer) {
+		ComputerHQLDto computerHQLDto = new ComputerHQLDto.ComputerHQLDtoBuilder().build();
+
+		Long id = null;
+		String name = null;
+		LocalDate introduced = null;
+		LocalDate discontinued = null;
+		Company company = null;
+		CompanyHQLDto companyHQLDto = new CompanyHQLDto();
+
+		
+		if (computer.getId() != null) {
+			id = computer.getId();
+		}
+
+		if (null != computer.getName()) {
+			name = computer.getName();
+		}
+
+		if (null != computer.getIntroduced()) {
+			introduced = computer.getIntroduced();
+		}
+		if (computer.getDiscontinued() != null) {
+			discontinued = computer.getDiscontinued();
+		}
+		if (computer.getCompany() != null) {
+			companyHQLDto = MapperCompanyDto.companyToCompanyHQLDto(company) ;  
+		}
+		
+		computerHQLDto = new ComputerHQLDto.ComputerHQLDtoBuilder().setId(id).setName(name).setIntroduced(introduced)
+				.setDiscontinued(discontinued).setCompanyHQLDto(companyHQLDto).build();
+
+		return computerHQLDto;
 	}
 }

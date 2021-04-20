@@ -1,14 +1,14 @@
 package com.excilys.formation.model;
-//list companies 
 
 public class Company {
-	private String name;
+
 	private Long id;
-	
+	private String name;
+
 	public Company() {
-		
+
 	}
-	
+
 	public Company(Long id, String name) {
 		this.setId(id);
 		this.setName(name);
@@ -29,10 +29,9 @@ public class Company {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String toString() {
 		return "company id = " + id + " company name = " + name;
 	}
-
 
 }

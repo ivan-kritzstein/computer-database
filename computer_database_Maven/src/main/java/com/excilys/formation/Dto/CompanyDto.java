@@ -2,15 +2,13 @@ package com.excilys.formation.Dto;
 
 public class CompanyDto {
 
-	private String name;
 	private String id;
-
+	private String name;
 	private CompanyDto(String id, String name) {
-		
+
 		this.name = name;
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;
@@ -28,7 +26,6 @@ public class CompanyDto {
 		this.id = id;
 	}
 
-
 	public static class CompanyDtoBuilder {
 
 		private String name;
@@ -39,7 +36,6 @@ public class CompanyDto {
 			return this;
 		}
 
-		
 		public CompanyDtoBuilder setId(String id) {
 			this.id = id;
 			return this;
@@ -56,4 +52,3 @@ public class CompanyDto {
 		return "ListComputerDto [" + "company name= " + name + ", company id=" + id + "]";
 	}
 }
-

@@ -1,5 +1,7 @@
 package com.excilys.formation.spring;
 
+import java.util.Properties;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
@@ -13,6 +15,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.WebApplicationInitializer;
@@ -83,13 +87,11 @@ public class WebConfig implements WebMvcConfigurer, WebApplicationInitializer {
 		return new DataSourceTransactionManager(getDataSource());
 	}
 
-	
 //	}
 
 //	--------------------------------------------------------------------------------------------------
 //											SPRING MVC
 //    --------------------------------------------------------------------------------------------------
-
 
 	@Bean
 	public ViewResolver viewResolver() {
@@ -110,27 +112,59 @@ public class WebConfig implements WebMvcConfigurer, WebApplicationInitializer {
 //												I18N
 //--------------------------------------------------------------------------------------------------
 
-	
 	@Bean("messageSource")
 	public MessageSource messageSource() {
-	    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-	    messageSource.setBasenames("I18N/message");
-	    messageSource.setDefaultEncoding("UTF-8");
-	    return messageSource;
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasenames("I18N/message");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
 	}
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-	    LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-	    localeChangeInterceptor.setParamName("lang");
-	    registry.addInterceptor(localeChangeInterceptor);
+		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+		localeChangeInterceptor.setParamName("lang");
+		registry.addInterceptor(localeChangeInterceptor);
 	}
-	
+
 	@Bean
 	public LocaleResolver localeResolver() {
-	    return new SessionLocaleResolver();
+		return new SessionLocaleResolver();
 	}
 //	--------------------------------------------------------------------------------------------------
 //												I18N
+//--------------------------------------------------------------------------------------------------
+
+//	--------------------------------------------------------------------------------------------------
+//												Hibernate
+//--------------------------------------------------------------------------------------------------
+
+	@Bean
+	public LocalSessionFactoryBean sessionFactory() {
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+		sessionFactory.setDataSource(getDataSource());
+		sessionFactory.setPackagesToScan("com.excilys.formation.*");
+		sessionFactory.setHibernateProperties(hibernateProperties());
+		return sessionFactory;
+	}
+
+	@Bean
+	public PlatformTransactionManager hibernateTransactionManager() {
+		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+		transactionManager.setSessionFactory(sessionFactory().getObject());
+		return transactionManager;
+	}
+
+	private final Properties hibernateProperties() {
+		Properties hibernateProperties = new Properties();
+
+		hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+
+		return hibernateProperties;
+	}
+
+//	--------------------------------------------------------------------------------------------------
+//												Hibernate
 //--------------------------------------------------------------------------------------------------
 
 }
