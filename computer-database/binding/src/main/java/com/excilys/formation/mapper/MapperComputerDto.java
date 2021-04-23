@@ -195,4 +195,34 @@ public class MapperComputerDto {
 
 		return computerHQLDto;
 	}
+	
+	public static AddComputerDto computerToAddComputerDto(Computer computer) {
+
+		String companyId = null;
+		String introduced = null;
+		String discontinued = null;
+		AddComputerDto addcmptDto = new AddComputerDto();
+
+		String id = computer.getId().toString();
+		String name = computer.getName();
+
+		if (computer.getIntroduced() != null) {
+			introduced = computer.getIntroduced().toString();
+		}
+		if (computer.getDiscontinued() != null) {
+			discontinued = computer.getDiscontinued().toString();
+		}
+
+		if (computer.getCompany().getId() != null) {
+			companyId = computer.getCompany().getId().toString();
+		}
+		
+		addcmptDto.setId(id);
+		addcmptDto.setName(name);
+		addcmptDto.setIntroduced(introduced);
+		addcmptDto.setDiscontinued(discontinued);
+		addcmptDto.setCompanyId(companyId);
+
+		return addcmptDto;
+	}
 }

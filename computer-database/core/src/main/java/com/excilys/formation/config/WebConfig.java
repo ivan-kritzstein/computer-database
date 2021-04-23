@@ -42,7 +42,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan(basePackages = { "com.excilys.formation.controller", "com.excilys.formation.DAO",
 		"com.excilys.formation.mapper", "com.excilys.formation.model", "com.excilys.formation.service",
 		"com.excilys.formation.spring", "com.excilys.formation.validation", "com.excilys.formation.view",
-		"com.excilys.formation.servlets" })
+		"com.excilys.formation.servlets", "com.excilys.formation.apis"})
 
 public class WebConfig implements WebMvcConfigurer, WebApplicationInitializer {
 	private static final String DB_PROPERTIES_NAME = "/db.properties";
